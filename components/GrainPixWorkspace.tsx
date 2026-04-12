@@ -144,8 +144,8 @@ export default function GrainPixWorkspace() {
                         {/* LEFT COLUMN: Preview + Controls */}
                         <div className="flex flex-col gap-4 min-h-0 flex-1 relative">
                             {/* Main Preview Container */}
-                            <div className="flex-1 min-h-0 bg-[#D9D9D9]/20 backdrop-blur-[40px] rounded-[32px] sm:rounded-[40px] border border-black/10 p-2 sm:p-4 relative flex flex-col overflow-hidden">
-                                <div className="w-full h-full bg-[#D9D9D9] rounded-[24px] sm:rounded-[32px] overflow-hidden relative flex-1 flex items-center justify-center group/main border border-black/5 shadow-inner">
+                            <div className="neo-shell-outer">
+                                <div className="neo-shell-inner w-full h-full overflow-hidden relative flex-1 flex items-center justify-center group/main">
                                     <canvas
                                         ref={canvasRef}
                                         className="max-w-full max-h-full object-contain shadow-2xl transition-transform duration-500 group-hover/main:scale-[1.01]"
@@ -161,14 +161,14 @@ export default function GrainPixWorkspace() {
                                     </motion.button>
 
                                     <div className="absolute top-4 left-4 z-10 flex gap-2">
-                                        <div className="bg-white/5 backdrop-blur-md border border-black/5 px-3 py-1.5 rounded-full flex items-center gap-2">
+                                        <div className="flex items-center gap-2 border-[2px] border-neo-ink bg-white px-3 py-1.5 shadow-[2px_2px_0_0_#0a0a0a]">
                                             <div className="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse shadow-[0_0_8px_rgba(22,163,74,0.4)]" />
                                             <span className="text-[10px] font-bold uppercase tracking-tight text-zinc-500">Live Engine</span>
                                         </div>
                                     </div>
 
                                     {/* Compact Floating Controls - Liquid Glass */}
-                                    <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 w-[94%] max-w-[840px] bg-white/60 backdrop-blur-xl rounded-[28px] sm:rounded-[36px] border border-white/40 shadow-[0_32px_80px_-16px_rgba(0,0,0,0.1)] p-3 sm:p-5 flex flex-col sm:flex-row items-center gap-4 sm:gap-8 z-20">
+                                    <div className="neo-dock max-w-[840px] p-3 sm:p-5 flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
                                         {/* Mode Toggle - Compact */}
                                         <div className="flex flex-row sm:flex-col items-center sm:items-start justify-between sm:justify-center shrink-0 w-full sm:w-auto">
                                             <div className="text-[8px] sm:text-[9px] font-bold text-zinc-400 uppercase tracking-tight mb-0 sm:mb-2 ml-1">Effect</div>
@@ -254,7 +254,7 @@ export default function GrainPixWorkspace() {
 
                         {/* RIGHT COLUMN: Sidebar (Queue) */}
                         <div className={clsx(
-                            "flex flex-col bg-[#e8e8e8] backdrop-blur-[40px] rounded-[32px] sm:rounded-[40px] border border-black/10 shadow-2xl overflow-hidden min-h-0",
+                            "flex flex-col neo-sidebar overflow-hidden min-h-0",
                             showQueue ? "fixed inset-4 z-50 lg:relative lg:inset-auto" : "hidden lg:flex",
                             "lg:h-full"
                         )}>

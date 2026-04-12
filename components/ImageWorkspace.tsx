@@ -88,8 +88,8 @@ export default function ImageWorkspace() {
                     >
                         {/* LEFT COLUMN: Preview + Controls */}
                         <div className="flex flex-col gap-4 min-h-0 flex-1 relative">
-                            <div className="flex-1 min-h-0 bg-[#D9D9D9]/20 backdrop-blur-[40px] rounded-[32px] sm:rounded-[40px] border border-black/10 p-2 sm:p-4 relative flex flex-col overflow-hidden">
-                                <div className="w-full h-full bg-[#D9D9D9] rounded-[24px] sm:rounded-[32px] overflow-hidden relative flex-1 flex items-center justify-center group/main border border-black/5 shadow-inner">
+                            <div className="neo-shell-outer">
+                                <div className="neo-shell-inner w-full h-full overflow-hidden relative flex-1 flex items-center justify-center group/main">
                                     {originalUrl ? (
                                         <div
                                             className="relative w-full h-full flex items-center justify-center cursor-pointer p-4 group"
@@ -121,9 +121,9 @@ export default function ImageWorkspace() {
                                             </AnimatePresence>
 
                                             {processedUrl && (
-                                                <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-[#D9D9D9]/80 backdrop-blur-xl px-4 py-2 rounded-full flex items-center gap-2 border border-black/5 opacity-0 group-hover:opacity-100 transition-all pointer-events-none scale-90 group-hover:scale-100">
+                                                <div className="absolute top-4 left-1/2 -translate-x-1/2 neo-pill-tag opacity-0 pointer-events-none transition-all scale-90 group-hover:scale-100 group-hover:opacity-100">
                                                     <Info size={12} className="text-black/40" />
-                                                    <span className="text-[9px] font-bold uppercase tracking-tight text-zinc-500">
+                                                    <span className="text-[9px] font-black uppercase tracking-tight text-neo-ink/70">
                                                         {showOriginal ? 'Original' : 'Hold to compare'}
                                                     </span>
                                                 </div>
@@ -147,7 +147,7 @@ export default function ImageWorkspace() {
                                 </div>
 
                                 {/* Compact Controls - Liquid Glass */}
-                                <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 w-[94%] max-w-[840px] bg-white/60 backdrop-blur-xl rounded-[28px] sm:rounded-[36px] border border-white/40 shadow-[0_32px_80px_-16px_rgba(0,0,0,0.1)] p-3 sm:p-5 flex flex-col sm:flex-row items-center gap-4 sm:gap-10 z-20">
+                                <div className="neo-dock max-w-[840px] p-3 sm:p-5 flex flex-col sm:flex-row items-center gap-4 sm:gap-10">
 
                                     {/* Size Info */}
                                     <div className="flex flex-row sm:flex-col items-center sm:items-start justify-between sm:justify-center shrink-0 w-full sm:w-auto min-w-[110px]">
@@ -218,7 +218,7 @@ export default function ImageWorkspace() {
 
                         {/* RIGHT COLUMN: Sidebar (Queue) */}
                         <div className={clsx(
-                            "flex flex-col bg-[#e8e8e8] backdrop-blur-[40px] rounded-[32px] sm:rounded-[40px] border border-black/10 shadow-2xl overflow-hidden min-h-0",
+                            "flex flex-col neo-sidebar overflow-hidden min-h-0",
                             showQueue ? "fixed inset-4 z-50 lg:relative lg:inset-auto" : "hidden lg:flex",
                             "lg:h-full"
                         )}>

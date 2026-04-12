@@ -164,7 +164,7 @@ export default function SynthStripWorkspace() {
                   setOutBlob(null);
                   setError(null);
                 }}
-                className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-black/40 hover:text-black touch-manipulation"
+                className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-neo-ink/45 hover:text-neo-ink touch-manipulation"
               >
                 <X className="w-4 h-4" />
                 Clear
@@ -173,8 +173,8 @@ export default function SynthStripWorkspace() {
 
             <div
               className={clsx(
-                "rounded-2xl border p-4 sm:p-5 space-y-3",
-                showInfo ? "bg-amber-50 border-amber-200" : "bg-zinc-100 border-zinc-200",
+                "space-y-3 rounded-xl border-[3px] border-neo-ink p-4 shadow-[5px_5px_0_0_#0a0a0a] sm:p-5",
+                showInfo ? "bg-neo-yellow" : "bg-white",
               )}
             >
               <button
@@ -234,16 +234,16 @@ export default function SynthStripWorkspace() {
               )}
             </div>
 
-            <div className="rounded-3xl bg-white border border-zinc-200 shadow-sm p-4 sm:p-6 space-y-5 relative z-10">
+            <div className="relative z-10 space-y-5 rounded-xl border-[3px] border-neo-ink bg-white p-4 shadow-[6px_6px_0_0_#0a0a0a] sm:p-6">
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   type="button"
                   onClick={() => setMode("meta")}
                   className={clsx(
-                    "flex-1 rounded-2xl px-4 py-3 text-left border-2 transition-all touch-manipulation",
+                    "flex-1 rounded-lg border-[3px] border-neo-ink px-4 py-3 text-left transition-all touch-manipulation",
                     mode === "meta"
-                      ? "border-zinc-800 bg-zinc-800 text-white"
-                      : "border-zinc-200 bg-zinc-50 hover:bg-zinc-100",
+                      ? "bg-neo-ink text-white shadow-[3px_3px_0_0_#62f5cd]"
+                      : "bg-white shadow-[3px_3px_0_0_#0a0a0a] hover:bg-neo-bg",
                   )}
                 >
                   <div className="text-xs font-bold uppercase tracking-tight mb-1">
@@ -258,10 +258,10 @@ export default function SynthStripWorkspace() {
                   type="button"
                   onClick={() => setMode("spectral")}
                   className={clsx(
-                    "flex-1 rounded-2xl px-4 py-3 text-left border-2 transition-all touch-manipulation",
+                    "flex-1 rounded-lg border-[3px] border-neo-ink px-4 py-3 text-left transition-all touch-manipulation",
                     mode === "spectral"
-                      ? "border-zinc-800 bg-zinc-800 text-white"
-                      : "border-zinc-200 bg-zinc-50 hover:bg-zinc-100",
+                      ? "bg-neo-ink text-white shadow-[3px_3px_0_0_#ffe94a]"
+                      : "bg-white shadow-[3px_3px_0_0_#0a0a0a] hover:bg-neo-bg",
                   )}
                 >
                   <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-tight mb-1">
@@ -287,7 +287,7 @@ export default function SynthStripWorkspace() {
                     max={85}
                     value={strength}
                     onChange={(e) => setStrength(Number(e.target.value))}
-                    className="w-full h-2 rounded-full accent-zinc-800 cursor-pointer touch-manipulation"
+                    className="h-3 w-full cursor-pointer touch-manipulation accent-neo-ink"
                   />
                   <p className="text-[10px] text-zinc-500 leading-relaxed">
                     Lower = closer to original pixels. Raising increases softening at a handful of
@@ -297,7 +297,7 @@ export default function SynthStripWorkspace() {
               )}
 
               {error && (
-                <p className="text-sm text-red-600 font-medium bg-red-50 rounded-xl px-3 py-2">
+                <p className="rounded-lg border-[3px] border-neo-ink bg-neo-magenta px-3 py-2 text-sm font-bold text-white shadow-[3px_3px_0_0_#0a0a0a]">
                   {error}
                 </p>
               )}
@@ -310,7 +310,7 @@ export default function SynthStripWorkspace() {
                   type="button"
                   disabled={busy || !file}
                   onClick={run}
-                  className="flex-1 min-h-12 rounded-2xl bg-zinc-800 text-white font-bold text-sm uppercase tracking-tight flex items-center justify-center gap-2 hover:bg-zinc-900 disabled:opacity-40 touch-manipulation"
+                  className="flex min-h-12 flex-1 items-center justify-center gap-2 border-[3px] border-neo-ink bg-neo-ink text-sm font-black uppercase tracking-tight text-white shadow-[4px_4px_0_0_#62f5cd] hover:translate-x-0.5 hover:translate-y-0.5 disabled:opacity-40 touch-manipulation"
                 >
                   {busy ? <Loader2 className="w-5 h-5 animate-spin" /> : <Fingerprint className="w-5 h-5" />}
                   {busy ? "Processing…" : "Process image"}
@@ -319,7 +319,7 @@ export default function SynthStripWorkspace() {
                   type="button"
                   disabled={!outBlob}
                   onClick={download}
-                  className="flex-1 min-h-12 rounded-2xl border-2 border-zinc-800 font-bold text-sm uppercase tracking-tight flex items-center justify-center gap-2 hover:bg-zinc-100 disabled:opacity-40 touch-manipulation"
+                  className="flex min-h-12 flex-1 items-center justify-center gap-2 border-[3px] border-neo-ink bg-white text-sm font-black uppercase tracking-tight text-neo-ink shadow-[4px_4px_0_0_#0a0a0a] hover:bg-neo-bg disabled:opacity-40 touch-manipulation"
                 >
                   <Download className="w-5 h-5" />
                   Download PNG
@@ -330,18 +330,18 @@ export default function SynthStripWorkspace() {
                 href="https://deepmind.google/technologies/synthid/"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-600 hover:text-zinc-900 underline-offset-2"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-neo-ink/70 underline-offset-4 hover:text-neo-ink"
               >
                 Official SynthID page <ExternalLink className="w-3 h-3" />
               </a>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-h-0">
-              <div className="rounded-3xl bg-zinc-100 border border-zinc-200 p-3 sm:p-4 flex flex-col min-h-[180px] overflow-hidden">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2 shrink-0">
+            <div className="grid min-h-0 grid-cols-1 gap-4 lg:grid-cols-2">
+              <div className="flex min-h-[180px] flex-col overflow-hidden rounded-xl border-[3px] border-neo-ink bg-white p-3 shadow-[5px_5px_0_0_#0a0a0a] sm:p-4">
+                <span className="mb-2 shrink-0 text-[10px] font-black uppercase tracking-widest text-neo-ink/50">
                   Original
                 </span>
-                <div className="flex-1 flex items-center justify-center min-h-0 overflow-hidden rounded-2xl bg-zinc-200/60">
+                <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-lg border-2 border-neo-ink bg-neo-bg">
                   {previewUrl && (
                     // eslint-disable-next-line @next/next/no-img-element -- blob preview
                     <img
@@ -352,11 +352,11 @@ export default function SynthStripWorkspace() {
                   )}
                 </div>
               </div>
-              <div className="rounded-3xl bg-zinc-100 border border-zinc-200 p-3 sm:p-4 flex flex-col min-h-[180px] overflow-hidden">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2 shrink-0">
+              <div className="flex min-h-[180px] flex-col overflow-hidden rounded-xl border-[3px] border-neo-ink bg-white p-3 shadow-[5px_5px_0_0_#0a0a0a] sm:p-4">
+                <span className="mb-2 shrink-0 text-[10px] font-black uppercase tracking-widest text-neo-ink/50">
                   Output (PNG)
                 </span>
-                <div className="flex-1 flex items-center justify-center min-h-0 overflow-hidden rounded-2xl bg-zinc-200/60">
+                <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-lg border-2 border-neo-ink bg-neo-bg">
                   {outUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -365,7 +365,7 @@ export default function SynthStripWorkspace() {
                       className="max-w-full max-h-[min(40vh,360px)] w-auto h-auto object-contain"
                     />
                   ) : (
-                    <div className="text-sm text-zinc-400 px-4 text-center">
+                    <div className="px-4 text-center text-sm font-semibold text-neo-ink/45">
                       Run process to preview
                     </div>
                   )}

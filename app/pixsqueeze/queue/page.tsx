@@ -28,7 +28,7 @@ export default function QueuePage() {
                     </Link>
                 </div>
 
-                <div className="flex-1 flex flex-col min-h-0 bg-white/40 backdrop-blur-xl rounded-[24px] sm:rounded-[40px] border border-black/5 shadow-2xl p-4 sm:p-6">
+                <div className="neo-queue-panel p-4 sm:p-6">
                     <div className="p-4 sm:p-6 shrink-0 flex items-center justify-between border-b border-black/5 bg-white/20">
                         <h3 className="text-xl font-bold text-[#1d1d1f] tracking-tight">Processing Queue</h3>
                         <div className="text-xs font-bold text-[#1d1d1f]/40 bg-black/5 px-2.5 py-1 rounded-full uppercase tracking-widest">

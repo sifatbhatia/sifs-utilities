@@ -126,8 +126,8 @@ export default function IconSetWorkspace() {
                     >
                         {/* LEFT: Preview Grid */}
                         <div className="flex flex-col gap-4 min-h-0 flex-1 relative h-full">
-                            <div className="flex-1 min-h-0 bg-[#D9D9D9]/20 backdrop-blur-[40px] rounded-[32px] sm:rounded-[40px] border border-black/10 p-2 sm:p-4 relative flex flex-col overflow-hidden">
-                                <div className="w-full h-full bg-[#D9D9D9] rounded-[24px] sm:rounded-[32px] overflow-hidden relative flex-1 p-6 sm:p-8 overflow-y-auto custom-scrollbar border border-black/5 shadow-inner">
+                            <div className="neo-shell-outer">
+                                <div className="neo-shell-inner w-full h-full overflow-hidden relative flex-1 p-6 sm:p-8 overflow-y-auto custom-scrollbar">
                                     <div className="flex flex-wrap items-end justify-center gap-6 sm:gap-10 pb-24 lg:pb-0">
                                         {sizes.map((size) => (
                                             <div
@@ -155,7 +155,7 @@ export default function IconSetWorkspace() {
                                                     </div>
 
                                                     {/* Size Badge */}
-                                                    <div className="absolute bottom-0 inset-x-0 bg-black/60 backdrop-blur-md py-1 translate-y-full group-hover:translate-y-0 transition-transform">
+                                                    <div className="absolute bottom-0 inset-x-0 border-t-[3px] border-neo-ink bg-neo-ink py-1 text-[10px] font-bold uppercase tracking-wide text-white translate-y-full transition-transform group-hover:translate-y-0">
                                                         <p className="text-[7px] sm:text-[9px] font-bold text-white text-center uppercase tracking-widest">{size.width}px</p>
                                                     </div>
                                                 </div>
@@ -178,7 +178,7 @@ export default function IconSetWorkspace() {
                                 </div>
 
                                 {/* Floating Action Bar - Mobile Optimized Controls */}
-                                <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 w-[94%] max-w-[600px] bg-white/60 backdrop-blur-xl rounded-[24px] sm:rounded-[32px] border border-white/40 shadow-[0_32px_80px_-16px_rgba(0,0,0,0.1)] p-3 sm:p-4 z-20 lg:hidden flex flex-col gap-3">
+                                <div className="neo-dock max-w-[600px] p-3 sm:p-4 lg:hidden flex flex-col gap-3">
                                     <div className="flex items-center gap-4">
                                         <div className="flex-1">
                                             <PremiumSlider
@@ -221,7 +221,7 @@ export default function IconSetWorkspace() {
 
                         {/* RIGHT: Sidebar (Desktop + Mobile Overlay) */}
                         <div className={clsx(
-                            "flex flex-col bg-[#e8e8e8] backdrop-blur-[40px] rounded-[32px] sm:rounded-[40px] border border-black/10 shadow-2xl overflow-hidden min-h-0 transition-transform duration-300",
+                            "flex flex-col neo-sidebar overflow-hidden min-h-0 transition-transform duration-300",
                             showSidebar ? "fixed inset-4 z-50 lg:relative lg:inset-auto translate-y-0" : "hidden lg:flex",
                             "lg:h-full"
                         )}>

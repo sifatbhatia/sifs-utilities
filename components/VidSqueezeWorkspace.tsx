@@ -79,8 +79,8 @@ export default function VidSqueezeWorkspace() {
                     >
                         {/* LEFT COLUMN: Preview + Controls */}
                         <div className="flex flex-col gap-4 min-h-0 flex-1 relative">
-                            <div className="flex-1 min-h-0 bg-[#D9D9D9]/20 backdrop-blur-[40px] rounded-[32px] sm:rounded-[40px] border border-black/10 p-2 sm:p-4 relative flex flex-col overflow-hidden">
-                                <div className="w-full h-full bg-[#D9D9D9] rounded-[24px] sm:rounded-[32px] overflow-hidden relative flex-1 flex items-center justify-center border border-black/5 shadow-inner">
+                            <div className="neo-shell-outer">
+                                <div className="neo-shell-inner w-full h-full overflow-hidden relative flex-1 flex items-center justify-center">
                                     {files.length > 0 ? (
                                         <div className="w-full h-full flex items-center justify-center p-4">
                                             <div className="relative max-w-full max-h-full rounded-2xl overflow-hidden shadow-2xl border border-black/5 bg-black">
@@ -162,7 +162,7 @@ export default function VidSqueezeWorkspace() {
 
                         {/* RIGHT COLUMN: Sidebar (Queue) */}
                         <div className={clsx(
-                            "flex flex-col bg-[#e8e8e8] backdrop-blur-[40px] rounded-[32px] sm:rounded-[40px] border border-black/10 shadow-2xl overflow-hidden min-h-0",
+                            "flex flex-col neo-sidebar overflow-hidden min-h-0",
                             showQueue ? "fixed inset-4 z-50 lg:relative lg:inset-auto" : "hidden lg:flex",
                             "lg:h-full"
                         )}>

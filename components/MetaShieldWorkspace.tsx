@@ -202,8 +202,8 @@ export default function MetaShieldWorkspace() {
                     >
                         {/* LEFT COLUMN: Preview */}
                         <div className="flex flex-col gap-4 min-h-0 flex-1 relative">
-                            <div className="flex-1 min-h-0 bg-[#D9D9D9]/20 backdrop-blur-[40px] rounded-[32px] sm:rounded-[40px] border border-black/10 p-2 sm:p-4 relative flex flex-col overflow-hidden">
-                                <div className="w-full h-full bg-[#D9D9D9] rounded-[24px] sm:rounded-[32px] overflow-hidden relative flex-1 flex items-center justify-center border border-black/5 shadow-inner">
+                            <div className="neo-shell-outer">
+                                <div className="neo-shell-inner w-full h-full overflow-hidden relative flex-1 flex items-center justify-center">
 
                                     {/* Image preview */}
                                     {file.type.startsWith('image/') && previewUrl ? (
@@ -272,14 +272,14 @@ export default function MetaShieldWorkspace() {
 
                                     {/* Processing overlay */}
                                     {isProcessing && (
-                                        <div className="absolute inset-0 bg-[#D9D9D9]/80 backdrop-blur-3xl flex flex-col items-center justify-center text-black z-20 rounded-[24px] sm:rounded-[32px]">
+                                        <div className="neo-modal-overlay">
                                             <Loader2 className="w-12 h-12 animate-spin mb-4 text-black/20" />
                                             <p className="text-[11px] font-bold uppercase tracking-tight text-zinc-400 animate-pulse">Scrubbing Metadata</p>
                                         </div>
                                     )}
 
                                     {/* Floating Controls — ABOVE preview on all devices */}
-                                    <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 w-[94%] max-w-[600px] bg-white/60 backdrop-blur-xl rounded-[24px] sm:rounded-[32px] border border-white/40 shadow-[0_32px_80px_-16px_rgba(0,0,0,0.1)] p-3 sm:p-4 flex items-center gap-4 z-20">
+                                    <div className="neo-dock max-w-[600px] p-3 sm:p-4 flex items-center gap-4">
 
                                         {/* Status */}
                                         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -329,7 +329,7 @@ export default function MetaShieldWorkspace() {
 
                         {/* RIGHT COLUMN: Sidebar (Details) */}
                         <div className={clsx(
-                            "flex flex-col bg-[#e8e8e8] backdrop-blur-[40px] rounded-[32px] sm:rounded-[40px] border border-black/10 shadow-2xl overflow-hidden min-h-0",
+                            "flex flex-col neo-sidebar overflow-hidden min-h-0",
                             showSidebar ? "fixed inset-4 z-50 lg:relative lg:inset-auto" : "hidden lg:flex",
                             "lg:h-full"
                         )}>

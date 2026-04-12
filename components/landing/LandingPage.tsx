@@ -57,8 +57,8 @@ const PILLARS = [
     icon: Shield,
   },
   {
-    title: "One calm workspace",
-    body: "Same gray surfaces, rounded corners, and motion from here into each tool — touch-friendly targets, safe areas, and layouts that still breathe on a small screen.",
+    title: "One loud, honest UI",
+    body: "Thick black frames, flat color blocks, and hard offset shadows — the same visual rules from this page into every tool. Big tap targets, safe areas, no glassmorphism theater.",
     icon: Sparkles,
   },
 ] as const;
@@ -77,23 +77,23 @@ function BentoTile({
     <Link
       href={t.href}
       className={clsx(
-        "lp-reveal group relative block touch-manipulation focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-800",
+        "lp-reveal group relative block touch-manipulation focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neo-ink",
         className,
       )}
     >
       <div
         className={clsx(
-          "flex h-full min-h-[inherit] flex-col rounded-[22px] border border-black/[0.07] bg-[#e5e5e5] p-5 shadow-sm transition-[transform,box-shadow,background-color] duration-300 sm:rounded-[28px] sm:p-6 md:p-7",
-          "hover:bg-[#eaeaea] hover:shadow-lg active:bg-[#e0e0e0] sm:hover:-translate-y-0.5",
+          "flex h-full min-h-[inherit] flex-col rounded-xl border-[3px] border-neo-ink bg-white p-5 shadow-[6px_6px_0_0_#0a0a0a] transition-[transform,box-shadow] duration-150 sm:p-6 md:p-7",
+          "hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_#0a0a0a] active:translate-x-1 active:translate-y-1",
         )}
       >
         <div className="flex items-start justify-between gap-3">
-          <span className="text-[9px] font-bold uppercase tracking-[0.28em] text-zinc-500 sm:text-[10px]">
+          <span className="text-[9px] font-black uppercase tracking-[0.28em] text-neo-ink/50 sm:text-[10px]">
             Tool
           </span>
           <div
             className={clsx(
-              "flex shrink-0 items-center justify-center rounded-xl sm:rounded-2xl",
+              "flex shrink-0 items-center justify-center border-[3px] border-neo-ink",
               featured ? "h-12 w-12 sm:h-14 sm:w-14" : "h-10 w-10 sm:h-11 sm:w-11",
               t.iconBg,
             )}
@@ -107,7 +107,7 @@ function BentoTile({
         <div className="mt-auto pt-6 sm:pt-8">
           <h3
             className={clsx(
-              "font-bold tracking-tight text-zinc-900",
+              "font-black tracking-tight text-neo-ink",
               featured ? "text-2xl sm:text-3xl md:text-4xl" : "text-lg sm:text-xl md:text-2xl",
             )}
           >
@@ -115,13 +115,13 @@ function BentoTile({
           </h3>
           <p
             className={clsx(
-              "mt-1.5 font-medium leading-relaxed text-zinc-600 sm:mt-2",
+              "mt-1.5 font-semibold leading-relaxed text-neo-ink/65 sm:mt-2",
               featured ? "text-sm sm:text-base max-w-md" : "text-xs sm:text-sm line-clamp-2 md:line-clamp-none",
             )}
           >
             {t.description}
           </p>
-          <span className="mt-4 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-800 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:text-xs">
+          <span className="mt-4 inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-neo-ink opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:text-xs">
             Open
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
           </span>
@@ -216,30 +216,24 @@ export default function LandingPage() {
   return (
     <main
       ref={root}
-      className="relative min-h-dvh bg-[#cecece] font-sans text-foreground selection:bg-zinc-800 selection:text-white"
+      className="relative min-h-dvh bg-neo-bg font-sans text-foreground selection:bg-neo-ink selection:text-white neo-page-grid"
     >
-      <div
-        className="pointer-events-none fixed inset-0 z-0 opacity-[0.035]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-        }}
-        aria-hidden
-      />
-
-      <nav className="lp-nav sticky top-0 z-50 border-b border-black/[0.06] bg-[#cecece]/85 backdrop-blur-md backdrop-saturate-150">
+      <nav className="lp-nav sticky top-0 z-50 border-b-[3px] border-neo-ink bg-neo-yellow shadow-[0_4px_0_0_#0a0a0a]">
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4 md:px-10 pt-[max(0.5rem,env(safe-area-inset-top,0px))]">
           <Link
             href="/"
-            className="flex min-h-11 min-w-11 items-center gap-2.5 rounded-xl font-semibold tracking-tight text-zinc-900 touch-manipulation focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-800 sm:gap-3"
+            className="flex min-h-11 min-w-11 items-center gap-2.5 touch-manipulation focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neo-ink sm:gap-3"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-800 text-white shadow-md shadow-black/10 sm:h-10 sm:w-10">
-              <LayoutGrid className="h-4 w-4 sm:h-[18px] sm:w-[18px]" strokeWidth={1.75} />
+            <span className="flex h-9 w-9 items-center justify-center border-[3px] border-neo-ink bg-white shadow-[3px_3px_0_0_#0a0a0a] sm:h-10 sm:w-10">
+              <LayoutGrid className="h-4 w-4 text-neo-ink sm:h-[18px] sm:w-[18px]" strokeWidth={2.25} />
             </span>
-            <span className="hidden text-sm sm:inline sm:text-base">{"Sif's Utilities"}</span>
+            <span className="hidden text-sm font-black tracking-tight text-neo-ink sm:inline sm:text-base">
+              {"Sif's Utilities"}
+            </span>
           </Link>
           <Link
             href="/sif/utils"
-            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-zinc-800 px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-lg shadow-black/12 transition-transform active:scale-[0.98] hover:bg-zinc-900 touch-manipulation sm:px-6 sm:text-xs"
+            className="inline-flex min-h-11 items-center gap-2 border-[3px] border-neo-ink bg-neo-ink px-4 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-[4px_4px_0_0_#62f5cd] transition-transform hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0_0_#62f5cd] active:translate-x-1 active:translate-y-1 touch-manipulation sm:px-6 sm:text-xs"
           >
             Hub
             <ArrowRight className="h-3.5 w-3.5" aria-hidden />
@@ -250,12 +244,12 @@ export default function LandingPage() {
       {/* Hero */}
       <section className="relative z-10 flex min-h-[min(100dvh,56rem)] flex-col justify-center px-4 pb-14 pt-6 sm:px-6 sm:pb-20 sm:pt-10 md:px-10 md:pb-28 md:pt-14">
         <div className="mx-auto max-w-[1600px]">
-          <p className="lp-fade mb-4 text-[10px] font-bold uppercase tracking-[0.32em] text-zinc-500 sm:mb-6 sm:text-[11px]">
+          <p className="lp-fade mb-4 inline-block border-[3px] border-neo-ink bg-neo-mint px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.28em] text-neo-ink shadow-[3px_3px_0_0_#0a0a0a] sm:mb-6 sm:text-[11px]">
             Browser-native suite
           </p>
 
           <div className="max-w-[min(100%,52rem)] lg:max-w-[min(100%,64rem)]">
-            <h1 className="text-[2.75rem] font-medium leading-[0.9] tracking-[-0.085em] text-primary sm:text-6xl sm:leading-[0.88] md:text-7xl md:leading-[0.86] lg:text-[min(6.5rem,9.2vw)]">
+            <h1 className="text-[2.75rem] font-black leading-[0.88] tracking-[-0.06em] text-neo-ink sm:text-6xl md:text-7xl lg:text-[min(6.5rem,9.2vw)]">
               <span className="lp-hero-line block overflow-hidden pb-[0.06em]">
                 <span className="lp-hero-line-inner block">Sif&apos;s</span>
               </span>
@@ -265,7 +259,7 @@ export default function LandingPage() {
             </h1>
           </div>
 
-          <p className="lp-fade mt-6 max-w-xl text-base font-medium leading-relaxed text-zinc-600 sm:mt-8 sm:text-lg md:max-w-2xl md:text-xl">
+          <p className="lp-fade mt-6 max-w-xl text-base font-semibold leading-relaxed text-neo-ink/70 sm:mt-8 sm:text-lg md:max-w-2xl md:text-xl">
             Compress, transcode, crop, scrub metadata, tune exports — eight focused workspaces with
             one shared design language, without the usual crawl through slow, ad-heavy, or
             half-forgotten utility sites.
@@ -274,14 +268,14 @@ export default function LandingPage() {
           <div className="lp-hero-cta mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center">
             <Link
               href="/sif/utils"
-              className="inline-flex min-h-[3rem] items-center justify-center gap-2.5 rounded-full bg-zinc-800 px-8 py-3 text-sm font-bold uppercase tracking-wide text-white shadow-[0_12px_40px_-12px_rgba(0,0,0,0.45)] transition-transform hover:bg-zinc-900 active:scale-[0.99] touch-manipulation sm:min-h-[3.25rem] sm:text-base"
+              className="inline-flex min-h-[3rem] items-center justify-center gap-2.5 border-[3px] border-neo-ink bg-neo-ink px-8 py-3 text-sm font-black uppercase tracking-wide text-white shadow-[6px_6px_0_0_#ffe94a] transition-transform hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_#ffe94a] active:translate-x-1 active:translate-y-1 touch-manipulation sm:min-h-[3.25rem] sm:text-base"
             >
               Open the hub
               <ArrowRight className="h-5 w-5" aria-hidden />
             </Link>
             <a
               href="#suite"
-              className="inline-flex min-h-[3rem] items-center justify-center rounded-full border-2 border-zinc-800/20 bg-[#e5e5e5]/80 px-8 py-3 text-sm font-bold uppercase tracking-wide text-zinc-800 transition-colors hover:border-zinc-800/35 hover:bg-[#eaeaea] touch-manipulation sm:min-h-[3.25rem] sm:text-base"
+              className="inline-flex min-h-[3rem] items-center justify-center border-[3px] border-neo-ink bg-white px-8 py-3 text-sm font-black uppercase tracking-wide text-neo-ink shadow-[6px_6px_0_0_#0a0a0a] transition-transform hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_#0a0a0a] touch-manipulation sm:min-h-[3.25rem] sm:text-base"
             >
               Browse the suite
             </a>
@@ -298,7 +292,7 @@ export default function LandingPage() {
                 <Link
                   key={t.href}
                   href={t.href}
-                  className="flex w-[min(17.5rem,calc(100vw-2.5rem))] shrink-0 touch-manipulation flex-col rounded-[22px] border border-black/[0.07] bg-[#e5e5e5] p-4 shadow-sm transition-transform active:scale-[0.99]"
+                  className="flex w-[min(17.5rem,calc(100vw-2.5rem))] shrink-0 touch-manipulation flex-col rounded-xl border-[3px] border-neo-ink bg-white p-4 shadow-[5px_5px_0_0_#0a0a0a] transition-transform active:translate-x-0.5 active:translate-y-0.5"
                 >
                   <div
                     className={clsx(
@@ -308,9 +302,9 @@ export default function LandingPage() {
                   >
                     <Icon className={clsx("h-5 w-5", t.iconClass)} strokeWidth={1.5} />
                   </div>
-                  <p className="font-bold text-zinc-900">{t.name}</p>
-                  <p className="mt-1 line-clamp-2 text-xs font-medium text-zinc-500">{t.description}</p>
-                  <span className="mt-3 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-zinc-700">
+                  <p className="font-black text-neo-ink">{t.name}</p>
+                  <p className="mt-1 line-clamp-2 text-xs font-semibold text-neo-ink/60">{t.description}</p>
+                  <span className="mt-3 inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-neo-ink">
                     Open <ChevronRight className="h-3.5 w-3.5" />
                   </span>
                 </Link>
@@ -321,13 +315,13 @@ export default function LandingPage() {
       </section>
 
       {/* Marquee */}
-      <div className="relative z-10 border-y border-black/[0.07] bg-[#c6c6c6]/50 py-3 sm:py-4">
+      <div className="relative z-10 border-y-[3px] border-neo-ink bg-neo-magenta py-3 sm:py-4">
         <div className="overflow-hidden">
           <div className="lp-marquee-track items-center pr-10 sm:pr-14">
             {doubledMarquee.map((label, i) => (
               <span
                 key={`${label}-${i}`}
-                className="shrink-0 text-[10px] font-bold uppercase tracking-[0.32em] text-zinc-600 sm:text-[11px]"
+                className="shrink-0 text-[10px] font-black uppercase tracking-[0.32em] text-white sm:text-[11px]"
               >
                 {label}
               </span>
@@ -335,11 +329,11 @@ export default function LandingPage() {
           </div>
         </div>
         <div
-          className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-[#c4c4c4] to-transparent sm:w-20"
+          className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-neo-magenta to-transparent sm:w-20"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-[#c4c4c4] to-transparent sm:w-20"
+          className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-neo-magenta to-transparent sm:w-20"
           aria-hidden
         />
       </div>
@@ -351,15 +345,15 @@ export default function LandingPage() {
       >
         <div className="mx-auto max-w-[1600px]">
           <div className="mb-10 max-w-2xl sm:mb-14 md:mb-16">
-            <p className="lp-reveal text-[10px] font-bold uppercase tracking-[0.32em] text-zinc-500 sm:text-[11px]">
+            <p className="lp-reveal inline-block border-[3px] border-neo-ink bg-white px-2 py-1 text-[10px] font-black uppercase tracking-[0.32em] text-neo-ink shadow-[3px_3px_0_0_#0a0a0a] sm:text-[11px]">
               The suite
             </p>
-            <h2 className="lp-reveal mt-3 text-3xl font-medium leading-[0.95] tracking-[-0.06em] text-primary sm:text-4xl md:text-5xl lg:text-6xl">
+            <h2 className="lp-reveal mt-3 text-3xl font-black leading-[0.92] tracking-[-0.05em] text-neo-ink sm:text-4xl md:text-5xl lg:text-6xl">
               Eight tools.
               <br />
               Built to match.
             </h2>
-            <p className="lp-reveal mt-4 text-base font-medium leading-relaxed text-zinc-600 sm:text-lg">
+            <p className="lp-reveal mt-4 text-base font-semibold leading-relaxed text-neo-ink/70 sm:text-lg">
               Tiles scale with the viewport; on desktop the grid opens up. Every link goes straight
               into the live workspace.
             </p>
@@ -376,15 +370,15 @@ export default function LandingPage() {
             ))}
             <Link
               href="/sif/utils"
-              className="lp-reveal col-span-12 flex min-h-[160px] touch-manipulation flex-col justify-between rounded-[22px] border border-dashed border-zinc-800/25 bg-[#d8d8d8]/80 p-6 transition-colors hover:border-zinc-800/40 hover:bg-[#dbdbdb] sm:min-h-[170px] sm:rounded-[28px] md:col-span-4 md:col-start-9 md:row-start-4 md:min-h-[170px]"
+              className="lp-reveal col-span-12 flex min-h-[160px] touch-manipulation flex-col justify-between rounded-xl border-[3px] border-dashed border-neo-ink bg-neo-lavender p-6 shadow-[6px_6px_0_0_#0a0a0a] transition-transform hover:translate-x-0.5 hover:translate-y-0.5 sm:min-h-[170px] md:col-span-4 md:col-start-9 md:row-start-4 md:min-h-[170px]"
             >
-              <LayoutGrid className="h-8 w-8 text-zinc-700" strokeWidth={1.25} aria-hidden />
+              <LayoutGrid className="h-8 w-8 text-neo-ink" strokeWidth={2} aria-hidden />
               <div>
-                <p className="text-lg font-bold text-zinc-900 sm:text-xl">Full hub grid</p>
-                <p className="mt-1 text-sm font-medium text-zinc-600">
+                <p className="text-lg font-black text-neo-ink sm:text-xl">Full hub grid</p>
+                <p className="mt-1 text-sm font-semibold text-neo-ink/75">
                   Prefer the classic two-column tool wall? It&apos;s one tap away.
                 </p>
-                <span className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-800">
+                <span className="mt-4 inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-neo-ink">
                   Open hub
                   <ArrowRight className="h-4 w-4" />
                 </span>
@@ -395,9 +389,9 @@ export default function LandingPage() {
       </section>
 
       {/* Pillars */}
-      <section className="relative z-10 border-t border-black/[0.06] bg-[#c9c9c9]/35 px-4 py-16 sm:px-6 sm:py-20 md:px-10 md:py-24">
+      <section className="relative z-10 border-t-[3px] border-neo-ink bg-neo-mint/40 px-4 py-16 sm:px-6 sm:py-20 md:px-10 md:py-24">
         <div className="mx-auto max-w-[1600px]">
-          <h2 className="lp-reveal text-center text-2xl font-medium tracking-[-0.05em] text-primary sm:text-3xl md:text-4xl">
+          <h2 className="lp-reveal text-center text-2xl font-black tracking-[-0.04em] text-neo-ink sm:text-3xl md:text-4xl">
             Why this exists
           </h2>
           <div className="mt-10 grid gap-4 sm:mt-14 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
@@ -406,13 +400,13 @@ export default function LandingPage() {
               return (
                 <div
                   key={p.title}
-                  className="lp-pillar rounded-[22px] border border-black/[0.07] bg-[#e5e5e5] p-6 sm:rounded-[28px] sm:p-8"
+                  className="lp-pillar rounded-xl border-[3px] border-neo-ink bg-white p-6 shadow-[6px_6px_0_0_#0a0a0a] sm:p-8"
                 >
-                  <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-zinc-800 text-white sm:h-12 sm:w-12">
-                    <Icon className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={1.5} />
+                  <div className="mb-5 flex h-11 w-11 items-center justify-center border-[3px] border-neo-ink bg-neo-yellow text-neo-ink shadow-[3px_3px_0_0_#0a0a0a] sm:h-12 sm:w-12">
+                    <Icon className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
                   </div>
-                  <h3 className="text-lg font-bold text-zinc-900 sm:text-xl">{p.title}</h3>
-                  <p className="mt-2 text-sm font-medium leading-relaxed text-zinc-600 sm:text-base">
+                  <h3 className="text-lg font-black text-neo-ink sm:text-xl">{p.title}</h3>
+                  <p className="mt-2 text-sm font-semibold leading-relaxed text-neo-ink/70 sm:text-base">
                     {p.body}
                   </p>
                 </div>
@@ -424,25 +418,17 @@ export default function LandingPage() {
 
       {/* CTA */}
       <section className="relative z-10 px-4 py-16 sm:px-6 sm:py-20 md:px-10 md:py-24">
-        <div className="lp-cta-inner mx-auto max-w-[1600px] overflow-hidden rounded-[28px] border border-black/10 bg-zinc-800 px-6 py-12 text-center shadow-2xl shadow-black/20 sm:rounded-[40px] sm:px-10 sm:py-16 md:py-20">
-          <div
-            className="pointer-events-none absolute -left-24 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-white/[0.04] blur-3xl"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute -right-16 bottom-0 h-56 w-56 rounded-full bg-white/[0.03] blur-3xl"
-            aria-hidden
-          />
-          <h2 className="relative text-2xl font-medium leading-tight tracking-[-0.04em] text-white sm:text-3xl md:text-4xl lg:text-5xl">
+        <div className="lp-cta-inner relative mx-auto max-w-[1600px] overflow-hidden rounded-xl border-[3px] border-neo-ink bg-neo-ink px-6 py-12 text-center shadow-[8px_8px_0_0_#ff2d7a] sm:px-10 sm:py-16 md:py-20">
+          <h2 className="relative text-2xl font-black leading-tight tracking-[-0.03em] text-white sm:text-3xl md:text-4xl lg:text-5xl">
             Pick up where you left off
           </h2>
-          <p className="relative mx-auto mt-4 max-w-md text-sm font-medium text-zinc-400 sm:text-base">
-            The hub keeps every utility in one calm grid — optimized for thumb reach on phones and
-            wide canvases on desktop.
+          <p className="relative mx-auto mt-4 max-w-md text-sm font-semibold text-white/80 sm:text-base">
+            The hub keeps every utility in one loud-clear grid — thumb reach on phones, wide layout
+            on desktop.
           </p>
           <Link
             href="/sif/utils"
-            className="relative mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-zinc-900 transition-transform hover:bg-zinc-100 active:scale-[0.98] touch-manipulation sm:mt-10 sm:min-h-14 sm:px-10"
+            className="relative mt-8 inline-flex min-h-12 items-center gap-2 border-[3px] border-neo-ink bg-neo-yellow px-8 py-3.5 text-sm font-black uppercase tracking-wide text-neo-ink shadow-[4px_4px_0_0_#ffffff] transition-transform hover:translate-x-0.5 hover:translate-y-0.5 touch-manipulation sm:mt-10 sm:min-h-14 sm:px-10"
           >
             Enter the hub
             <ArrowRight className="h-5 w-5" aria-hidden />
@@ -450,25 +436,25 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-black/[0.08] px-4 py-10 sm:px-6 md:px-10 pb-[max(2.5rem,env(safe-area-inset-bottom,0px))]">
+      <footer className="relative z-10 border-t-[3px] border-neo-ink bg-neo-bg px-4 py-10 sm:px-6 md:px-10 pb-[max(2.5rem,env(safe-area-inset-bottom,0px))]">
         <div className="mx-auto flex max-w-[1600px] flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
-          <p className="text-xs font-semibold text-zinc-600">
+          <p className="text-xs font-black text-neo-ink/60">
             {"Sif's Utilities"} · Next.js
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 sm:text-xs">
-            <Link href="/pixsqueeze" className="min-h-11 px-1 hover:text-zinc-800 touch-manipulation sm:min-h-0">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[10px] font-black uppercase tracking-[0.2em] text-neo-ink/55 sm:text-xs">
+            <Link href="/pixsqueeze" className="min-h-11 px-1 underline decoration-[3px] underline-offset-4 hover:text-neo-ink touch-manipulation sm:min-h-0">
               PixSqueeze
             </Link>
-            <span className="text-zinc-400" aria-hidden>
+            <span className="text-neo-ink/30" aria-hidden>
               ·
             </span>
-            <Link href="/vidsqueeze" className="min-h-11 px-1 hover:text-zinc-800 touch-manipulation sm:min-h-0">
+            <Link href="/vidsqueeze" className="min-h-11 px-1 underline decoration-[3px] underline-offset-4 hover:text-neo-ink touch-manipulation sm:min-h-0">
               VidSqueeze
             </Link>
-            <span className="text-zinc-400" aria-hidden>
+            <span className="text-neo-ink/30" aria-hidden>
               ·
             </span>
-            <Link href="/sif/utils" className="min-h-11 px-1 hover:text-zinc-800 touch-manipulation sm:min-h-0">
+            <Link href="/sif/utils" className="min-h-11 px-1 underline decoration-[3px] underline-offset-4 hover:text-neo-ink touch-manipulation sm:min-h-0">
               All tools
             </Link>
           </div>

@@ -2,6 +2,14 @@
 
 @theme {
   --font-sans: var(--font-geist-sans), var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* Neo-brutalism / anti-design accents (flat, high contrast) */
+  --color-neo-ink: #0a0a0a;
+  --color-neo-bg: #fff8e8;
+  --color-neo-surface: #ffffff;
+  --color-neo-yellow: #ffe94a;
+  --color-neo-magenta: #ff2d7a;
+  --color-neo-mint: #62f5cd;
+  --color-neo-lavender: #c5b4fc;
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
@@ -28,32 +36,28 @@
 }
 
 :root {
-  --background: 0 0% 85.1%;
-  /* #D9D9D9 */
-  --foreground: 0 0% 33.3%;
-  /* #555555 */
-  --card: 0 0% 85.1%;
-  /* #D9D9D9 */
-  --card-foreground: 0 0% 33.3%;
-  /* #555555 */
+  --neo-ink: #0a0a0a;
+  /* Warm cream field + near-black type (neo-brutalist baseline) */
+  --background: 48 100% 95%;
+  --foreground: 0 0% 4%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 4%;
   --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 0 0% 33.3%;
-  /* #555555 */
+  --popover-foreground: 0 0% 4%;
+  --primary: 0 0% 4%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 0 0% 96.1%;
-  --secondary-foreground: 0 0% 33.3%;
-  --muted: 0 0% 96.1%;
-  --muted-foreground: 0 0% 45%;
-  --accent: 0 0% 96.1%;
-  --accent-foreground: 0 0% 33.3%;
+  --secondary: 48 80% 88%;
+  --secondary-foreground: 0 0% 4%;
+  --muted: 48 40% 90%;
+  --muted-foreground: 0 0% 32%;
+  --accent: 286 85% 82%;
+  --accent-foreground: 0 0% 4%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 33.3%;
-  --input: 0 0% 33.3%;
-  --ring: 0 0% 33.3%;
-  --radius: 2rem;
-  /* Rounded corners appear large in design */
+  --border: 0 0% 4%;
+  --input: 0 0% 4%;
+  --ring: 0 0% 4%;
+  --radius: 0.75rem;
 }
 
 .dark {
@@ -159,12 +163,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+  background: rgba(10, 10, 10, 0.22);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(10, 10, 10, 0.35);
 }
 
 /* Utility class for containers that need a slimmer scrollbar */
@@ -174,17 +178,131 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
+  background: rgba(10, 10, 10, 0.18);
+  border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(10, 10, 10, 0.28);
 }
 
 /* For dark areas specifically */
 .dark-scrollbar::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
+}
+
+/* ========== NEO-BRUTALISM PRIMITIVES ========== */
+
+.neo-shell-outer {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 3px solid var(--neo-ink);
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+  background-color: #ffe94a;
+  box-shadow: 5px 5px 0 0 var(--neo-ink);
+}
+
+@media (min-width: 640px) {
+  .neo-shell-outer {
+    padding: 0.75rem;
+  }
+}
+
+.neo-shell-inner {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  border: 3px solid var(--neo-ink);
+  border-radius: 0.5rem;
+  background-color: #fff8e8;
+}
+
+.neo-shell-inner--white {
+  background-color: #ffffff;
+}
+
+.neo-page-grid {
+  background-color: #fff8e8;
+  background-image:
+    linear-gradient(rgba(10, 10, 10, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 10, 10, 0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.neo-sidebar {
+  border: 3px solid var(--neo-ink);
+  border-radius: 0.75rem;
+  background-color: #c5b4fc;
+  box-shadow: 5px 5px 0 0 var(--neo-ink);
+}
+
+.neo-dock {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 94%;
+  z-index: 20;
+  border: 3px solid var(--neo-ink);
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  box-shadow: 6px 6px 0 0 var(--neo-ink);
+}
+
+@media (min-width: 640px) {
+  .neo-dock {
+    bottom: 1.5rem;
+  }
+}
+
+.neo-modal-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--neo-ink);
+  border-radius: 0.5rem;
+  background-color: rgba(255, 248, 232, 0.96);
+  color: var(--neo-ink);
+}
+
+.neo-modal-overlay--solid {
+  background-color: #ffffff;
+}
+
+.neo-queue-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 3px solid var(--neo-ink);
+  border-radius: 1rem;
+  background-color: #ffffff;
+  box-shadow: 6px 6px 0 0 var(--neo-ink);
+}
+
+.neo-pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 2px solid var(--neo-ink);
+  background: #ffffff;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.5625rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  box-shadow: 3px 3px 0 0 var(--neo-ink);
 }
 
 /* ========== LANDING (custom page) ========== */

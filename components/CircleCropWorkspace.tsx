@@ -100,8 +100,8 @@ export default function CircleCropWorkspace() {
                         className="flex-1 flex flex-col p-2 sm:p-4 md:p-6 min-h-0 h-full overflow-hidden max-w-[1500px] mx-auto w-full"
                     >
                         {/* Cropper Container */}
-                        <div className="flex-1 min-h-0 bg-[#D9D9D9]/20 backdrop-blur-[40px] rounded-[32px] sm:rounded-[40px] border border-black/10 p-2 sm:p-4 relative flex flex-col overflow-hidden">
-                            <div className="w-full h-full bg-[#D9D9D9] rounded-[24px] sm:rounded-[32px] overflow-hidden relative flex-1 border border-black/5 shadow-inner">
+                        <div className="neo-shell-outer">
+                            <div className="neo-shell-inner w-full h-full overflow-hidden relative flex-1">
                                 <Cropper
                                     image={originalImage}
                                     crop={crop}
@@ -115,7 +115,7 @@ export default function CircleCropWorkspace() {
                                     cropShape="round"
                                     showGrid={false}
                                     classes={{
-                                        containerClassName: 'bg-[#D9D9D9]',
+                                        containerClassName: 'bg-[#fff8e8]',
                                         cropAreaClassName: `shadow-[0_0_0_9999px_rgba(217,217,217,0.7)]`
                                     }}
                                     style={{
@@ -136,7 +136,7 @@ export default function CircleCropWorkspace() {
                                 </motion.button>
 
                                 {isProcessing && (
-                                    <div className="absolute inset-0 bg-[#D9D9D9]/80 backdrop-blur-3xl flex flex-col items-center justify-center text-black z-20">
+                                    <div className="neo-modal-overlay">
                                         <Loader2 className="w-12 h-12 animate-spin mb-4 text-black/20" />
                                         <p className="text-[11px] font-bold uppercase tracking-tight text-zinc-400 animate-pulse">Rendering</p>
                                     </div>
@@ -144,7 +144,7 @@ export default function CircleCropWorkspace() {
                             </div>
 
                             {/* Compact Floating Controls - Liquid Glass */}
-                            <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 w-[94%] max-w-[840px] bg-white/60 backdrop-blur-xl rounded-[28px] sm:rounded-[36px] border border-white/40 shadow-[0_32px_80px_-16px_rgba(0,0,0,0.1)] p-3 sm:p-5 flex flex-col sm:flex-row items-center gap-4 sm:gap-10 z-20">
+                            <div className="neo-dock max-w-[840px] p-3 sm:p-5 flex flex-col sm:flex-row items-center gap-4 sm:gap-10">
 
                                 {/* Sliders Group */}
                                 <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-3 gap-6">

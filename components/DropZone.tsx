@@ -1,61 +1,66 @@
 "use client";
 
-import React, { useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { Plus } from 'lucide-react';
-import clsx from 'clsx';
+import React, { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
+import { Plus } from "lucide-react";
+import clsx from "clsx";
 
 interface DropZoneProps {
-    onFileSelect: (files: File[]) => void;
-    isProcessing: boolean;
-    accept?: Record<string, string[]>;
-    text?: string;
-    subText?: string;
+  onFileSelect: (files: File[]) => void;
+  isProcessing: boolean;
+  accept?: Record<string, string[]>;
+  text?: string;
+  subText?: string;
 }
 
 export default function DropZone({
-    onFileSelect,
-    isProcessing,
-    accept = { 'image/*': ['.jpeg', '.jpg', '.png', '.webp', '.avif', '.tiff', '.bmp', '.ico'] },
-    text = "Add your images",
-    subText = "Drop images here"
+  onFileSelect,
+  isProcessing,
+  accept = { "image/*": [".jpeg", ".jpg", ".png", ".webp", ".avif", ".tiff", ".bmp", ".ico"] },
+  text = "Add your images",
+  subText = "Drop images here",
 }: DropZoneProps) {
-    const onDrop = useCallback((acceptedFiles: File[]) => {
-        if (acceptedFiles.length > 0) {
-            onFileSelect(acceptedFiles);
-        }
-    }, [onFileSelect]);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles.length > 0) {
+        onFileSelect(acceptedFiles);
+      }
+    },
+    [onFileSelect],
+  );
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-        accept,
-        multiple: true,
-        disabled: isProcessing
-    });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept,
+    multiple: true,
+    disabled: isProcessing,
+  });
 
-    return (
+  return (
+    <div
+      {...getRootProps()}
+      className={clsx(
+        "relative group cursor-pointer touch-manipulation w-full min-h-[200px] h-full max-w-[1610px] flex flex-col items-center justify-center rounded-xl border-[3px] border-neo-ink bg-white shadow-[6px_6px_0_0_#0a0a0a] transition-[transform,box-shadow] duration-150 ease-out hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_#0a0a0a] active:translate-x-1 active:translate-y-1 active:shadow-[2px_2px_0_0_#0a0a0a]",
+        isDragActive && "bg-neo-mint ring-2 ring-neo-ink ring-offset-2 ring-offset-[#fff8e8]",
+        isProcessing && "opacity-50 cursor-not-allowed",
+      )}
+    >
+      <input {...getInputProps()} />
+
+      <div className="z-10 flex flex-col items-center gap-4 px-4 py-6 text-center sm:gap-6">
         <div
-            {...getRootProps()}
-            className={clsx(
-                "relative group cursor-pointer touch-manipulation w-full min-h-[200px] h-full max-w-[1610px] bg-[#D9D9D9] rounded-[28px] sm:rounded-[48px] lg:rounded-[67px] border border-[#8E8E8E] flex flex-col items-center justify-center transition-all duration-300 ease-out hover:bg-[#e5e5e5] active:bg-[#d0d0d0]",
-                isDragActive && "bg-[#cccccc] scale-[0.99]",
-                isProcessing && "opacity-50 cursor-not-allowed"
-            )}
+          className={clsx(
+            "flex h-14 w-14 items-center justify-center rounded-lg border-[3px] border-neo-ink bg-neo-ink text-white shadow-[4px_4px_0_0_#62f5cd] transition-transform duration-150 sm:h-16 sm:w-16",
+            isDragActive ? "scale-110" : "group-hover:scale-105",
+          )}
         >
-            <input {...getInputProps()} />
-
-            <div className="flex flex-col items-center gap-4 sm:gap-6 z-10 text-center px-4 py-6">
-                <div className={clsx(
-                    "w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#555555] flex items-center justify-center text-white transition-transform duration-300",
-                    isDragActive ? "scale-110" : "group-hover:scale-105"
-                )}>
-                    <Plus className="w-7 h-7 sm:w-8 sm:h-8" strokeWidth={2} />
-                </div>
-
-                <p className="text-lg sm:text-2xl font-medium text-[#555555] tracking-tight leading-tight select-none max-w-[18rem] sm:max-w-none">
-                    {isDragActive ? subText : text}
-                </p>
-            </div>
+          <Plus className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={2.5} />
         </div>
-    );
+
+        <p className="max-w-[18rem] select-none text-lg font-extrabold uppercase leading-tight tracking-tight text-neo-ink sm:max-w-none sm:text-2xl">
+          {isDragActive ? subText : text}
+        </p>
+      </div>
+    </div>
+  );
 }
