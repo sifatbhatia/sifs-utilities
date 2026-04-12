@@ -1,0 +1,53 @@
+{
+  "name": "sifutils",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sif's Utilities — browser-based utilities for images, video, PDFs, metadata, grain effects, and app icons (Next.js + React).",
+  "keywords": [
+    "sifs-utilities",
+    "sifutils",
+    "image-compression",
+    "video-compression",
+    "pdf",
+    "ffmpeg",
+    "nextjs",
+    "browser-tools"
+  ],
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
+    "browser-image-compression": "^2.0.2",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.34.0",
+    "jszip": "^3.10.1",
+    "lucide-react": "^0.563.0",
+    "next": "16.1.6",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^5.4.624",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-dropzone": "^14.4.0",
+    "react-easy-crop": "^5.5.6",
+    "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/jszip": "^3.4.1",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/react-dropzone": "^5.1.0",
+    "@types/sharp": "^0.32.0",
+    "babel-plugin-react-compiler": "1.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
