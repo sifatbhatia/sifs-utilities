@@ -187,27 +187,33 @@
   background: rgba(255, 255, 255, 0.15);
 }
 
-/* ========== LANDING PAGE ========== */
+/* ========== LANDING (custom page) ========== */
 
-.landing-grain {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity: 0.04;
-  pointer-events: none;
-}
-
-.landing-marquee-track {
+.lp-marquee-track {
   display: flex;
   width: max-content;
-  animation: landing-marquee 48s linear infinite;
+  gap: 2.5rem;
+  animation: lp-marquee 38s linear infinite;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .landing-marquee-track {
-    animation: none;
+@media (min-width: 640px) {
+  .lp-marquee-track {
+    gap: 3.5rem;
   }
 }
 
-@keyframes landing-marquee {
+@media (prefers-reduced-motion: reduce) {
+  .lp-marquee-track {
+    animation: none;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 42rem;
+    margin-inline: auto;
+  }
+}
+
+@keyframes lp-marquee {
   from {
     transform: translateX(0);
   }
@@ -216,33 +222,18 @@
   }
 }
 
-@keyframes landing-float-soft {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  33% {
-    transform: translate(2%, -3%) scale(1.02);
-  }
-  66% {
-    transform: translate(-2%, 2%) scale(0.98);
-  }
+.lp-scroll-hint {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 
-.landing-orb-drift {
-  animation: landing-float-soft 22s ease-in-out infinite;
+.lp-scroll-hint::-webkit-scrollbar {
+  display: none;
 }
 
-.landing-orb-drift-delayed {
-  animation: landing-float-soft 28s ease-in-out infinite;
-  animation-delay: -8s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .landing-orb-drift,
-  .landing-orb-drift-delayed {
-    animation: none;
-  }
+.lp-scroll-hint > * {
+  scroll-snap-align: start;
 }
 
 /* ========== MOBILE OPTIMIZATIONS ========== */

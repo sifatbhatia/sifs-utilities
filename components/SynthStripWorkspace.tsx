@@ -130,7 +130,7 @@ export default function SynthStripWorkspace() {
   }, [outBlob]);
 
   return (
-    <div className="w-full h-full flex flex-col flex-1 min-h-0 relative">
+    <div className="w-full h-full flex flex-col flex-1 min-h-0 relative isolate">
       <PremiumBackground />
       <AnimatePresence mode="wait">
         {!file ? (
@@ -174,7 +174,7 @@ export default function SynthStripWorkspace() {
             <div
               className={clsx(
                 "rounded-2xl border p-4 sm:p-5 space-y-3",
-                showInfo ? "bg-amber-50/90 border-amber-200" : "bg-white/40 border-black/10",
+                showInfo ? "bg-amber-50 border-amber-200" : "bg-zinc-100 border-zinc-200",
               )}
             >
               <button
@@ -234,40 +234,7 @@ export default function SynthStripWorkspace() {
               )}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-h-0">
-              <div className="rounded-3xl bg-[#D9D9D9]/30 border border-black/10 p-3 flex flex-col min-h-[200px]">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-black/40 mb-2">
-                  Original
-                </span>
-                {previewUrl && (
-                  // eslint-disable-next-line @next/next/no-img-element -- blob preview
-                  <img
-                    src={previewUrl}
-                    alt=""
-                    className="max-w-full max-h-[min(50vh,420px)] object-contain rounded-2xl mx-auto"
-                  />
-                )}
-              </div>
-              <div className="rounded-3xl bg-[#D9D9D9]/30 border border-black/10 p-3 flex flex-col min-h-[200px]">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-black/40 mb-2">
-                  Output (PNG)
-                </span>
-                {outUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={outUrl}
-                    alt=""
-                    className="max-w-full max-h-[min(50vh,420px)] object-contain rounded-2xl mx-auto"
-                  />
-                ) : (
-                  <div className="flex-1 flex items-center justify-center text-sm text-black/30">
-                    Run process to preview
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="rounded-3xl bg-white/50 backdrop-blur border border-white/30 p-4 sm:p-6 space-y-5">
+            <div className="rounded-3xl bg-white border border-zinc-200 shadow-sm p-4 sm:p-6 space-y-5 relative z-10">
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   type="button"
@@ -276,7 +243,7 @@ export default function SynthStripWorkspace() {
                     "flex-1 rounded-2xl px-4 py-3 text-left border-2 transition-all touch-manipulation",
                     mode === "meta"
                       ? "border-zinc-800 bg-zinc-800 text-white"
-                      : "border-black/10 bg-white/60 hover:bg-white/80",
+                      : "border-zinc-200 bg-zinc-50 hover:bg-zinc-100",
                   )}
                 >
                   <div className="text-xs font-bold uppercase tracking-tight mb-1">
@@ -294,7 +261,7 @@ export default function SynthStripWorkspace() {
                     "flex-1 rounded-2xl px-4 py-3 text-left border-2 transition-all touch-manipulation",
                     mode === "spectral"
                       ? "border-zinc-800 bg-zinc-800 text-white"
-                      : "border-black/10 bg-white/60 hover:bg-white/80",
+                      : "border-zinc-200 bg-zinc-50 hover:bg-zinc-100",
                   )}
                 >
                   <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-tight mb-1">
@@ -367,6 +334,43 @@ export default function SynthStripWorkspace() {
               >
                 Official SynthID page <ExternalLink className="w-3 h-3" />
               </a>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-h-0">
+              <div className="rounded-3xl bg-zinc-100 border border-zinc-200 p-3 sm:p-4 flex flex-col min-h-[180px] overflow-hidden">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2 shrink-0">
+                  Original
+                </span>
+                <div className="flex-1 flex items-center justify-center min-h-0 overflow-hidden rounded-2xl bg-zinc-200/60">
+                  {previewUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element -- blob preview
+                    <img
+                      src={previewUrl}
+                      alt=""
+                      className="max-w-full max-h-[min(40vh,360px)] w-auto h-auto object-contain"
+                    />
+                  )}
+                </div>
+              </div>
+              <div className="rounded-3xl bg-zinc-100 border border-zinc-200 p-3 sm:p-4 flex flex-col min-h-[180px] overflow-hidden">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2 shrink-0">
+                  Output (PNG)
+                </span>
+                <div className="flex-1 flex items-center justify-center min-h-0 overflow-hidden rounded-2xl bg-zinc-200/60">
+                  {outUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={outUrl}
+                      alt=""
+                      className="max-w-full max-h-[min(40vh,360px)] w-auto h-auto object-contain"
+                    />
+                  ) : (
+                    <div className="text-sm text-zinc-400 px-4 text-center">
+                      Run process to preview
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </motion.div>
         )}

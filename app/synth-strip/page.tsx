@@ -12,8 +12,8 @@ const SynthStripWorkspace = dynamic(
 
 export default function SynthStripPage() {
   return (
-    <main className="min-h-dvh h-[100dvh] bg-background p-safe-page relative overflow-hidden flex flex-col">
-      <div className="max-w-[1760px] mx-auto w-full h-full flex flex-col">
+    <main className="min-h-dvh min-h-0 bg-background p-safe-page relative flex flex-col">
+      <div className="max-w-[1760px] mx-auto w-full flex-1 flex flex-col min-h-0">
         <div className="shrink-0 mb-1 sm:mb-2">
           <Link
             href="/sif/utils"
@@ -35,7 +35,7 @@ export default function SynthStripPage() {
             </p>
           </header>
 
-          <div className="flex-1 flex items-stretch justify-center min-h-0">
+          <div className="flex-1 flex flex-col min-h-0">
             <SynthStripWorkspace />
           </div>
         </div>

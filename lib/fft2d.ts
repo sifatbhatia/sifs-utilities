@@ -6,7 +6,8 @@
 function bitReversePermute(re: Float64Array, im: Float64Array): void {
   const n = re.length;
   let j = 0;
-  for (let i = 0; i < n; i++) {
+  // Standard loop is i < n - 1; one more iteration can drive k to 0 and hang `while (k <= j)`.
+  for (let i = 0; i < n - 1; i++) {
     if (i < j) {
       [re[i], re[j]] = [re[j], re[i]];
       [im[i], im[j]] = [im[j], im[i]];
