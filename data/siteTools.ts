@@ -21,7 +21,7 @@ export type SiteTool = {
 export const SITE_TOOLS: SiteTool[] = [
   {
     name: "PixSqueeze",
-    description: "Smart image compression with instant preview.",
+    description: "Compress JPG, PNG, WebP, and AVIF images with live quality and format controls.",
     href: "/pixsqueeze",
     Icon: ImageIcon,
     iconClass: "text-blue-600",
@@ -29,7 +29,7 @@ export const SITE_TOOLS: SiteTool[] = [
   },
   {
     name: "PDFPress",
-    description: "Secure, client-side PDF compression.",
+    description: "Reduce PDF size with adjustable compression and side-by-side preview.",
     href: "/pdf-compressor",
     Icon: FileText,
     iconClass: "text-red-600",
@@ -37,7 +37,7 @@ export const SITE_TOOLS: SiteTool[] = [
   },
   {
     name: "CircleCrop",
-    description: "Crop images into perfect circles instantly.",
+    description: "Crop any image into a clean circle with zoom, rotation, and border controls.",
     href: "/circle-crop",
     Icon: CircleDashed,
     iconClass: "text-purple-600",
@@ -45,7 +45,7 @@ export const SITE_TOOLS: SiteTool[] = [
   },
   {
     name: "VidSqueeze",
-    description: "Compress videos directly in your browser.",
+    description: "Compress videos in-browser with quality controls and quick export.",
     href: "/vidsqueeze",
     Icon: Video,
     iconClass: "text-orange-600",
@@ -53,7 +53,7 @@ export const SITE_TOOLS: SiteTool[] = [
   },
   {
     name: "MetaShield",
-    description: "Strip metadata and protect your privacy.",
+    description: "Remove metadata from images and documents before sharing.",
     href: "/meta-shield",
     Icon: Zap,
     iconClass: "text-indigo-600",
@@ -61,8 +61,7 @@ export const SITE_TOOLS: SiteTool[] = [
   },
   {
     name: "SynthClean",
-    description:
-      "Strip EXIF and optionally soften SynthID-like frequency carriers (Gemini / Nano Banana).",
+    description: "Strip metadata and optionally soften SynthID-like carrier patterns in image exports.",
     href: "/synth-strip",
     Icon: Fingerprint,
     iconClass: "text-amber-700",
@@ -70,7 +69,7 @@ export const SITE_TOOLS: SiteTool[] = [
   },
   {
     name: "GrainPix",
-    description: "Add organic film grain with mathematical precision.",
+    description: "Apply adjustable film-grain texture with real-time canvas preview.",
     href: "/grain-pix",
     Icon: Zap,
     iconClass: "text-zinc-600",
@@ -78,7 +77,7 @@ export const SITE_TOOLS: SiteTool[] = [
   },
   {
     name: "IconSet",
-    description: "Craft perfect app icons and favicons in seconds.",
+    description: "Generate app icon packs and favicons from a single logo source.",
     href: "/icon-set",
     Icon: LayoutGrid,
     iconClass: "text-emerald-600",

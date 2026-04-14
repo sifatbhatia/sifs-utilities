@@ -11,8 +11,12 @@ import BatchQueue, { BatchFile } from './BatchQueue';
 import { formatBytes } from '@/lib/compression';
 
 import PremiumSlider from './PremiumSlider';
+import { useTheme } from '@/components/theme/ThemeProvider';
+import { workspaceChrome } from '@/lib/marketingChrome';
 
 export default function VidSqueezeWorkspace() {
+    const { theme } = useTheme();
+    const w = workspaceChrome(theme);
     const {
         files,
         setFiles,
@@ -135,8 +139,8 @@ export default function VidSqueezeWorkspace() {
                                             icon={<Settings2 className="w-3" />}
                                             onChange={() => { }}
                                             onAfterChange={(v) => setQuality(v)}
-                                            labelColor="text-zinc-500"
-                                            valueColor="text-zinc-800"
+                                            labelColor={theme === "neo-brutal" ? "text-neo-ink/50" : "text-zinc-400"}
+                                            valueColor={theme === "neo-brutal" ? "text-neo-ink" : "text-zinc-800"}
                                         />
                                         <div className="flex justify-between text-[7px] font-bold text-zinc-300 uppercase tracking-[0.3em] px-1 pointer-events-none">
                                             <span>High Fidelity</span>
@@ -151,7 +155,7 @@ export default function VidSqueezeWorkspace() {
                                             whileTap={{ scale: 0.98 }}
                                             onClick={handleDownloadAll}
                                             disabled={totalCompressedSize === 0 || isBatchProcessing}
-                                            className="w-full bg-zinc-700 text-white px-8 py-3.5 rounded-[20px] font-bold text-[11px] sm:text-xs uppercase tracking-tight flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all shadow-xl border border-white/10 disabled:opacity-30"
+                                            className={clsx(w.runPrimary, "w-full px-8 py-3.5 rounded-[20px] text-[11px] sm:text-xs")}
                                         >
                                             <Download className="w-3.5 h-3.5" /> Export All
                                         </motion.button>
@@ -167,7 +171,7 @@ export default function VidSqueezeWorkspace() {
                             "lg:h-full"
                         )}>
                             <div className="p-5 shrink-0 flex items-center justify-between border-b border-black/10 bg-black/5">
-                                <h3 className="text-sm font-bold text-zinc-800 uppercase tracking-tight">Queue</h3>
+                                <h3 className={clsx("text-sm font-bold uppercase tracking-tight", theme === "neo-brutal" ? "text-neo-ink" : "text-zinc-800")}>Queue</h3>
                                 <div className="flex items-center gap-2">
                                     <div className="text-[10px] font-bold text-zinc-400 bg-zinc-100 px-2.5 py-1 rounded-full uppercase tracking-tight">{files.length}</div>
                                     <button onClick={() => setShowQueue(false)} className="lg:hidden p-1.5 rounded-full hover:bg-black/10 transition-colors">
@@ -187,7 +191,14 @@ export default function VidSqueezeWorkspace() {
                         {/* Mobile Queue Button */}
                         <button
                             onClick={() => setShowQueue(true)}
-                            className="fixed safe-fab z-40 lg:hidden w-12 h-12 min-w-12 min-h-12 bg-zinc-700 text-white rounded-full shadow-xl flex items-center justify-center hover:bg-zinc-800 active:scale-95 transition-all border border-white/10 touch-manipulation"
+                            className={clsx(
+                                "fixed safe-fab z-40 lg:hidden w-12 h-12 min-w-12 min-h-12 rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-all touch-manipulation",
+                                theme === "classic"
+                                    ? "bg-[#575757] text-white hover:bg-[#4d4d4d]"
+                                    : theme === "liquid-glass"
+                                        ? "bg-neutral-900 text-white hover:bg-neutral-800 border border-white/10"
+                                        : "bg-neo-ink text-white hover:bg-neo-ink/90 border-[3px] border-neo-ink"
+                            )}
                         >
                             <List className="w-5 h-5" />
                         </button>

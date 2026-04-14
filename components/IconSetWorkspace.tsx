@@ -8,8 +8,12 @@ import PremiumBackground from '@/components/PremiumBackground';
 import JSZip from 'jszip';
 import PremiumSlider from './PremiumSlider';
 import clsx from 'clsx';
+import { useTheme } from '@/components/theme/ThemeProvider';
+import { workspaceChrome } from '@/lib/marketingChrome';
 
 export default function IconSetWorkspace() {
+    const { theme } = useTheme();
+    const w = workspaceChrome(theme);
     const [file, setFile] = useState<File | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [scale, setScale] = useState(0.8);
@@ -178,7 +182,7 @@ export default function IconSetWorkspace() {
                                 </div>
 
                                 {/* Floating Action Bar - Mobile Optimized Controls */}
-                                <div className="neo-dock max-w-[600px] p-3 sm:p-4 lg:hidden flex flex-col gap-3">
+                                <div className="neo-dock max-w-[600px] p-3 sm:p-4 lg:hidden flex flex-col gap-3 backdrop-blur-xl shadow-[0px_18px_36px_0px_rgba(0,0,0,0.16),0px_2px_8px_0px_rgba(0,0,0,0.08),inset_0px_1px_0px_0px_rgba(255,255,255,0.36)]">
                                     <div className="flex items-center gap-4">
                                         <div className="flex-1">
                                             <PremiumSlider
@@ -190,8 +194,8 @@ export default function IconSetWorkspace() {
                                                 labelTransform={(v) => `${Math.round(v * 100)}%`}
                                                 icon={<Maximize className="w-3 h-3" />}
                                                 onChange={setScale}
-                                                labelColor="text-zinc-500"
-                                                valueColor="text-zinc-800"
+                                                labelColor={theme === "neo-brutal" ? "text-neo-ink/50" : "text-zinc-400"}
+                                                valueColor={theme === "neo-brutal" ? "text-neo-ink" : "text-zinc-800"}
                                             />
                                         </div>
                                         <div className="relative w-10 h-10 rounded-xl border border-black/10 shrink-0 group overflow-hidden">
@@ -210,7 +214,7 @@ export default function IconSetWorkspace() {
                                         whileTap={{ scale: 0.98 }}
                                         onClick={generateIcons}
                                         disabled={isProcessing}
-                                        className="w-full bg-zinc-700 text-white px-6 py-3.5 rounded-[16px] font-bold text-[10px] uppercase tracking-tight flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all shadow-xl border border-white/10 disabled:opacity-30"
+                                        className={clsx(w.runPrimary, "w-full px-6 py-3.5 rounded-[16px] text-[10px]")}
                                     >
                                         {isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Layers className="w-4 h-4" />}
                                         {isProcessing ? 'Generating' : 'Generate Bundle'}
@@ -278,8 +282,8 @@ export default function IconSetWorkspace() {
                                             labelTransform={(v) => `${Math.round(v * 100)}%`}
                                             icon={<Maximize className="w-3 h-3" />}
                                             onChange={setScale}
-                                            labelColor="text-zinc-500"
-                                            valueColor="text-zinc-800"
+                                            labelColor={theme === "neo-brutal" ? "text-neo-ink/50" : "text-zinc-400"}
+                                            valueColor={theme === "neo-brutal" ? "text-neo-ink" : "text-zinc-800"}
                                         />
 
                                         {/* Shape Selector */}
@@ -295,8 +299,14 @@ export default function IconSetWorkspace() {
                                                         className={clsx(
                                                             "py-2.5 rounded-xl text-[9px] font-bold uppercase tracking-tight transition-all border",
                                                             shape === s
-                                                                ? "bg-zinc-800 text-white border-zinc-800 shadow-md"
-                                                                : "bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300"
+                                                                ? (theme === "classic"
+                                                                    ? "bg-[#575757] text-white border-[#575757] shadow-md"
+                                                                    : theme === "liquid-glass"
+                                                                        ? "bg-neutral-900 text-white border-neutral-900 shadow-md"
+                                                                        : "bg-neo-ink text-white border-neo-ink shadow-md")
+                                                                : (theme === "neo-brutal"
+                                                                    ? "bg-white text-neo-ink/70 border-neo-ink/25 hover:bg-neo-bg hover:border-neo-ink/45"
+                                                                    : "bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300")
                                                         )}
                                                     >
                                                         {s}
@@ -336,7 +346,7 @@ export default function IconSetWorkspace() {
                                     whileTap={{ scale: 0.98 }}
                                     onClick={generateIcons}
                                     disabled={isProcessing}
-                                    className="w-full bg-zinc-700 text-white px-8 py-4 rounded-[20px] font-bold text-[11px] uppercase tracking-tight flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all shadow-xl border border-white/10 disabled:opacity-30"
+                                    className={clsx(w.runPrimary, "w-full px-8 py-4 rounded-[20px] text-[11px]")}
                                 >
                                     {isProcessing ? <Loader2 className="w-4 h-4 animate-spin text-white/50" /> : <Layers className="w-4 h-4" />}
                                     {isProcessing ? 'Creating Bundle' : 'Generate & Download'}
@@ -350,7 +360,14 @@ export default function IconSetWorkspace() {
                         {/* Mobile Sidebar Toggle */}
                         <button
                             onClick={() => setShowSidebar(true)}
-                            className="fixed safe-fab z-40 lg:hidden w-12 h-12 min-w-12 min-h-12 bg-zinc-700 text-white rounded-full shadow-xl flex items-center justify-center hover:bg-zinc-800 active:scale-95 transition-all border border-white/10 touch-manipulation"
+                            className={clsx(
+                                "fixed safe-fab z-40 lg:hidden w-12 h-12 min-w-12 min-h-12 rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-all touch-manipulation",
+                                theme === "classic"
+                                    ? "bg-[#575757] text-white hover:bg-[#4d4d4d]"
+                                    : theme === "liquid-glass"
+                                        ? "bg-neutral-900 text-white hover:bg-neutral-800 border border-white/10"
+                                        : "bg-neo-ink text-white hover:bg-neo-ink/90 border-[3px] border-neo-ink"
+                            )}
                         >
                             <List className="w-5 h-5" />
                         </button>

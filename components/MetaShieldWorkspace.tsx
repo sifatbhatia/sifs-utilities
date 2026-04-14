@@ -9,8 +9,12 @@ import PremiumBackground from '@/components/PremiumBackground';
 import clsx from 'clsx';
 import { PDFDocument } from 'pdf-lib';
 import JSZip from 'jszip';
+import { useTheme } from '@/components/theme/ThemeProvider';
+import { workspaceChrome } from '@/lib/marketingChrome';
 
 export default function MetaShieldWorkspace() {
+    const { theme } = useTheme();
+    const w = workspaceChrome(theme);
     const [file, setFile] = useState<File | null>(null);
     const [isCleaned, setIsCleaned] = useState(false);
     const [cleanedBlob, setCleanedBlob] = useState<Blob | null>(null);
@@ -198,11 +202,11 @@ export default function MetaShieldWorkspace() {
                         key="workspace"
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="flex-1 flex flex-col lg:grid lg:grid-cols-[1fr_360px] gap-4 p-2 sm:p-4 md:p-6 min-h-0 h-full overflow-hidden max-w-[1500px] mx-auto w-full relative"
+                        className="flex-1 flex flex-col lg:grid lg:grid-cols-[1fr_340px] gap-4 p-2 sm:p-4 md:p-6 min-h-0 h-full overflow-y-auto lg:overflow-hidden max-w-[1500px] mx-auto w-full relative"
                     >
                         {/* LEFT COLUMN: Preview */}
-                        <div className="flex flex-col gap-4 min-h-0 flex-1 relative">
-                            <div className="neo-shell-outer">
+                        <div className="flex flex-col gap-4 min-h-[380px] lg:min-h-0 flex-1 relative">
+                            <div className="neo-shell-outer flex-1 min-h-[340px]">
                                 <div className="neo-shell-inner w-full h-full overflow-hidden relative flex-1 flex items-center justify-center">
 
                                     {/* Image preview */}
@@ -279,7 +283,7 @@ export default function MetaShieldWorkspace() {
                                     )}
 
                                     {/* Floating Controls — ABOVE preview on all devices */}
-                                    <div className="neo-dock max-w-[600px] p-3 sm:p-4 flex items-center gap-4">
+                                    <div className="neo-dock max-w-[600px] p-3 sm:p-4 flex items-center gap-4 backdrop-blur-xl shadow-[0px_18px_36px_0px_rgba(0,0,0,0.16),0px_2px_8px_0px_rgba(0,0,0,0.08),inset_0px_1px_0px_0px_rgba(255,255,255,0.36)]">
 
                                         {/* Status */}
                                         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -307,7 +311,7 @@ export default function MetaShieldWorkspace() {
                                                 whileTap={{ scale: 0.98 }}
                                                 onClick={handleClean}
                                                 disabled={isProcessing}
-                                                className="shrink-0 bg-zinc-700 text-white px-5 sm:px-7 py-2.5 sm:py-3 rounded-[16px] sm:rounded-[20px] font-bold text-[10px] sm:text-[11px] uppercase tracking-tight flex items-center gap-2 hover:bg-zinc-800 transition-all shadow-xl border border-white/10 disabled:opacity-30"
+                                                className={clsx(w.runPrimary, "shrink-0 px-5 sm:px-7 py-2.5 sm:py-3 rounded-[16px] sm:rounded-[20px] text-[10px] sm:text-[11px]")}
                                             >
                                                 <ShieldCheck className="w-3.5 h-3.5" /> Scrub
                                             </motion.button>
@@ -317,7 +321,7 @@ export default function MetaShieldWorkspace() {
                                                 whileTap={{ scale: 0.98 }}
                                                 href={cleanedBlob ? URL.createObjectURL(cleanedBlob) : '#'}
                                                 download={`safe_${file.name.replace(/(\.[^\\.]+)$/, '_clean$1')}`}
-                                                className="shrink-0 bg-zinc-700 text-white px-5 sm:px-7 py-2.5 sm:py-3 rounded-[16px] sm:rounded-[20px] font-bold text-[10px] sm:text-[11px] uppercase tracking-tight flex items-center gap-2 hover:bg-zinc-800 transition-all shadow-xl border border-white/10"
+                                                className={clsx(w.runPrimary, "shrink-0 px-5 sm:px-7 py-2.5 sm:py-3 rounded-[16px] sm:rounded-[20px] text-[10px] sm:text-[11px]")}
                                             >
                                                 <Download className="w-3.5 h-3.5" /> Download
                                             </motion.a>
@@ -441,7 +445,7 @@ export default function MetaShieldWorkspace() {
                                         whileTap={{ scale: 0.98 }}
                                         onClick={handleClean}
                                         disabled={isProcessing}
-                                        className="w-full bg-zinc-700 text-white px-8 py-4 rounded-[20px] font-bold text-[11px] uppercase tracking-tight flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all shadow-xl border border-white/10 disabled:opacity-30"
+                                        className={clsx(w.runPrimary, "w-full px-8 py-4 rounded-[20px] text-[11px]")}
                                     >
                                         {isProcessing ? (
                                             <><Loader2 className="w-4 h-4 animate-spin" /> Scrubbing</>
@@ -455,7 +459,7 @@ export default function MetaShieldWorkspace() {
                                         whileTap={{ scale: 0.98 }}
                                         href={cleanedBlob ? URL.createObjectURL(cleanedBlob) : '#'}
                                         download={`safe_${file.name.replace(/(\.[^\\.]+)$/, '_clean$1')}`}
-                                        className="w-full bg-zinc-700 text-white px-8 py-4 rounded-[20px] font-bold text-[11px] uppercase tracking-tight flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all shadow-xl border border-white/10"
+                                        className={clsx(w.runPrimary, "w-full px-8 py-4 rounded-[20px] text-[11px]")}
                                     >
                                         <Download className="w-4 h-4" /> Download Safe File
                                     </motion.a>
@@ -469,7 +473,14 @@ export default function MetaShieldWorkspace() {
                         {/* Mobile Sidebar Button */}
                         <button
                             onClick={() => setShowSidebar(true)}
-                            className="fixed safe-fab z-40 lg:hidden w-12 h-12 min-w-12 min-h-12 bg-zinc-700 text-white rounded-full shadow-xl flex items-center justify-center hover:bg-zinc-800 active:scale-95 transition-all border border-white/10 touch-manipulation"
+                            className={clsx(
+                                "fixed safe-fab z-40 lg:hidden w-12 h-12 min-w-12 min-h-12 rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-all touch-manipulation",
+                                theme === "classic"
+                                    ? "bg-[#575757] text-white hover:bg-[#4d4d4d]"
+                                    : theme === "liquid-glass"
+                                        ? "bg-neutral-900 text-white hover:bg-neutral-800 border border-white/10"
+                                        : "bg-neo-ink text-white hover:bg-neo-ink/90 border-[3px] border-neo-ink"
+                            )}
                         >
                             <List className="w-5 h-5" />
                         </button>

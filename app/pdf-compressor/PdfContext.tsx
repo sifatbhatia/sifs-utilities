@@ -4,15 +4,19 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import { PDFDocument } from 'pdf-lib';
 
 // --- PDF.js Dynamic Import ---
-// We dynamically import pdfjs-dist to avoid SSR issues and to configure
+// We dynamically import pdfjs-dist legacy build to avoid SSR issues,
+// improve runtime compatibility, and configure the worker correctly.
 // the worker correctly at runtime.
-let pdfjsLib: typeof import('pdfjs-dist') | null = null;
+let pdfjsLib: typeof import('pdfjs-dist/legacy/build/pdf.mjs') | null = null;
 
 async function getPdfjs() {
     if (pdfjsLib) return pdfjsLib;
-    pdfjsLib = await import('pdfjs-dist');
-    // Use local worker file copied to /public for reliable loading
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+    pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
+    // Ensure the worker bundle matches the installed pdfjs-dist version.
+    pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+        'pdfjs-dist/legacy/build/pdf.worker.min.mjs',
+        import.meta.url
+    ).toString();
     return pdfjsLib;
 }
 

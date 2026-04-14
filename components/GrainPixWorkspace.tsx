@@ -1,18 +1,22 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, X, Sparkles, List, Layers, Zap } from 'lucide-react';
+import { Download, X, Sparkles, List, Layers, Zap, SlidersHorizontal } from 'lucide-react';
 import DropZone from './DropZone';
 import PremiumBackground from '@/components/PremiumBackground';
 import { useGrain } from '@/app/grain-pix/GrainContext';
 import BatchQueue from './BatchQueue';
 import PremiumSlider from './PremiumSlider';
 import clsx from 'clsx';
+import { useTheme } from '@/components/theme/ThemeProvider';
+import { workspaceChrome } from '@/lib/marketingChrome';
 
 // WebGPU renderer removed
 
 export default function GrainPixWorkspace() {
+    const { theme } = useTheme();
+    const w = workspaceChrome(theme);
     const {
         files,
         setFiles,
@@ -25,9 +29,11 @@ export default function GrainPixWorkspace() {
     } = useGrain();
 
     const [showQueue, setShowQueue] = React.useState(false);
+    const [showMobileTuning, setShowMobileTuning] = useState(false);
 
     const [originalImage, setOriginalImage] = useState<HTMLImageElement | null>(null);
-    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const [canvasReadyTick, setCanvasReadyTick] = useState(0);
 
     // Active file logic
     const activeFile = activeFileId ? files.find(f => f.id === activeFileId) : (files.length > 0 ? files[0] : null);
@@ -47,9 +53,9 @@ export default function GrainPixWorkspace() {
 
     // Draw Grain (Preview Loop)
     useEffect(() => {
-        if (!activeFile || !originalImage || !canvasRef.current) return;
-
         const canvas = canvasRef.current;
+        if (!activeFile || !originalImage || !canvas) return;
+
         const ctx = canvas.getContext('2d', { alpha: false });
         if (!ctx) return;
 
@@ -111,7 +117,7 @@ export default function GrainPixWorkspace() {
             ctx.drawImage(canvas, 0, 0);
             ctx.filter = 'none';
         }
-    }, [activeFile, originalImage, settings]);
+    }, [activeFile, originalImage, settings, canvasReadyTick]);
 
     return (
         <div className="w-full h-full flex flex-col flex-1 min-h-0 relative text-[#1d1d1f]">
@@ -145,9 +151,12 @@ export default function GrainPixWorkspace() {
                         <div className="flex flex-col gap-4 min-h-0 flex-1 relative">
                             {/* Main Preview Container */}
                             <div className="neo-shell-outer">
-                                <div className="neo-shell-inner w-full h-full overflow-hidden relative flex-1 flex items-center justify-center group/main">
+                                <div className="neo-shell-inner w-full h-full overflow-hidden relative flex-1 flex items-start justify-center sm:items-center group/main">
                                     <canvas
-                                        ref={canvasRef}
+                                        ref={(node) => {
+                                            canvasRef.current = node;
+                                            if (node) setCanvasReadyTick((v) => v + 1);
+                                        }}
                                         className="max-w-full max-h-full object-contain shadow-2xl transition-transform duration-500 group-hover/main:scale-[1.01]"
                                     />
 
@@ -161,18 +170,27 @@ export default function GrainPixWorkspace() {
                                     </motion.button>
 
                                     <div className="absolute top-4 left-4 z-10 flex gap-2">
-                                        <div className="flex items-center gap-2 border-[2px] border-neo-ink bg-white px-3 py-1.5 shadow-[2px_2px_0_0_#0a0a0a]">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse shadow-[0_0_8px_rgba(22,163,74,0.4)]" />
-                                            <span className="text-[10px] font-bold uppercase tracking-tight text-zinc-500">Live Engine</span>
+                                        <div className={w.grainChip}>
+                                            <div className="w-1.5 h-1.5 rounded-full bg-zinc-500" />
+                                            <span className="text-[10px] font-bold uppercase tracking-tight text-zinc-500">Preview</span>
                                         </div>
                                     </div>
 
                                     {/* Compact Floating Controls - Liquid Glass */}
-                                    <div className="neo-dock max-w-[840px] p-3 sm:p-5 flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+                                    <div className="neo-dock max-w-[840px] p-3 sm:p-5 flex flex-col items-center gap-3 sm:gap-8 max-h-[56vh] overflow-y-auto sm:max-h-none sm:overflow-visible backdrop-blur-xl shadow-[0px_18px_36px_0px_rgba(0,0,0,0.16),0px_2px_8px_0px_rgba(0,0,0,0.08),inset_0px_1px_0px_0px_rgba(255,255,255,0.36)]">
                                         {/* Mode Toggle - Compact */}
-                                        <div className="flex flex-row sm:flex-col items-center sm:items-start justify-between sm:justify-center shrink-0 w-full sm:w-auto">
+                                        <div className="flex flex-row sm:flex-col items-center sm:items-start justify-between sm:justify-center shrink-0 w-full sm:w-auto gap-2">
                                             <div className="text-[8px] sm:text-[9px] font-bold text-zinc-400 uppercase tracking-tight mb-0 sm:mb-2 ml-1">Effect</div>
-                                            <div className="flex bg-zinc-100 p-1 rounded-xl border border-zinc-200">
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowMobileTuning((v) => !v)}
+                                                    className="sm:hidden inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-100 px-2.5 py-1.5 text-[9px] font-bold uppercase tracking-tight text-zinc-600"
+                                                >
+                                                    <SlidersHorizontal className="w-3 h-3" />
+                                                    Tune
+                                                </button>
+                                                <div className="flex bg-zinc-100 p-1 rounded-xl border border-zinc-200">
                                                 {['manual', 'lumegrain'].map((m) => (
                                                     <motion.button
                                                         key={m}
@@ -194,11 +212,15 @@ export default function GrainPixWorkspace() {
                                                         {m === 'lumegrain' ? 'Lume' : 'Man'}
                                                     </motion.button>
                                                 ))}
+                                                </div>
                                             </div>
                                         </div>
 
                                         {/* Parameters Grid - Compact */}
-                                        <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                                        <div className={clsx(
+                                            "flex-1 w-full grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6",
+                                            showMobileTuning ? "grid" : "hidden sm:grid"
+                                        )}>
                                             <PremiumSlider
                                                 label="Intensity"
                                                 value={settings.amount}
@@ -207,7 +229,7 @@ export default function GrainPixWorkspace() {
                                                 unit="%"
                                                 icon={<Zap className="w-3" />}
                                                 onChange={(v) => setSettings(prev => ({ ...prev, amount: v }))}
-                                                labelColor="text-zinc-500"
+                                                labelColor="text-zinc-400"
                                                 valueColor="text-zinc-800"
                                             />
                                             <PremiumSlider
@@ -218,7 +240,7 @@ export default function GrainPixWorkspace() {
                                                 unit="%"
                                                 icon={<Layers className="w-3" />}
                                                 onChange={(v) => setSettings(prev => ({ ...prev, roughness: v }))}
-                                                labelColor="text-zinc-500"
+                                                labelColor="text-zinc-400"
                                                 valueColor="text-zinc-800"
                                             />
                                             <PremiumSlider
@@ -230,7 +252,7 @@ export default function GrainPixWorkspace() {
                                                 unit="px"
                                                 icon={<Sparkles className="w-3" />}
                                                 onChange={(v) => setSettings(prev => ({ ...prev, size: v }))}
-                                                labelColor="text-zinc-500"
+                                                labelColor="text-zinc-400"
                                                 valueColor="text-zinc-800"
                                             />
                                         </div>
@@ -242,7 +264,7 @@ export default function GrainPixWorkspace() {
                                                 whileTap={{ scale: 0.98 }}
                                                 onClick={handleDownloadAll}
                                                 disabled={isBatchProcessing || files.length === 0}
-                                                className="w-full bg-zinc-700 text-white px-8 py-3.5 rounded-[20px] font-bold text-[11px] sm:text-xs uppercase tracking-tight flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all shadow-xl border border-white/10 disabled:opacity-30"
+                                                className="w-full bg-zinc-700 text-white px-8 py-3.5 rounded-[20px] font-bold text-[11px] sm:text-xs uppercase tracking-tight flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all shadow-[0px_16px_34px_0px_rgba(0,0,0,0.25),0px_2px_8px_0px_rgba(0,0,0,0.14),inset_0px_1px_0px_0px_rgba(255,255,255,0.22)] hover:shadow-[0px_20px_40px_0px_rgba(0,0,0,0.3),0px_2px_10px_0px_rgba(0,0,0,0.16),inset_0px_1px_0px_0px_rgba(255,255,255,0.28)] border border-white/10 disabled:opacity-30"
                                             >
                                                 <Download className="w-3.5 h-3.5" /> Export
                                             </motion.button>

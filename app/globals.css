@@ -2,14 +2,14 @@
 
 @theme {
   --font-sans: var(--font-geist-sans), var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  /* Neo-brutalism / anti-design accents (flat, high contrast) */
-  --color-neo-ink: #0a0a0a;
-  --color-neo-bg: #fff8e8;
-  --color-neo-surface: #ffffff;
-  --color-neo-yellow: #ffe94a;
-  --color-neo-magenta: #ff2d7a;
-  --color-neo-mint: #62f5cd;
-  --color-neo-lavender: #c5b4fc;
+  /* Theme tokens (set on html[data-theme]) */
+  --color-neo-ink: var(--tw-neo-ink);
+  --color-neo-bg: var(--tw-neo-bg);
+  --color-neo-surface: var(--tw-neo-surface);
+  --color-neo-yellow: var(--tw-neo-yellow);
+  --color-neo-magenta: var(--tw-neo-magenta);
+  --color-neo-mint: var(--tw-neo-mint);
+  --color-neo-lavender: var(--tw-neo-lavender);
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
@@ -35,22 +35,80 @@
   --radius-sm: calc(var(--radius) - 4px);
 }
 
-:root {
-  --neo-ink: #0a0a0a;
-  /* Warm cream field + near-black type (neo-brutalist baseline) */
-  --background: 48 100% 95%;
-  --foreground: 0 0% 4%;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 4%;
+/* ---- Visual themes (Classic · Neo-brutal · Liquid Glass) ---- */
+
+html[data-theme="classic"] {
+  --tw-neo-ink: #404040;
+  --tw-neo-bg: #CACACA;
+  --tw-neo-surface: #ffffff;
+  --tw-neo-yellow: #d6d6d6;
+  --tw-neo-magenta: #b8b8c8;
+  --tw-neo-mint: #c5d4cb;
+  --tw-neo-lavender: #d4d0e8;
+  --neo-ink: #404040;
+  --background: 0 0% 81%;
+  --foreground: 0 0% 33%;
+  --card: 0 0% 85%;
+  --card-foreground: 0 0% 33%;
   --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 20%;
+  --primary: 0 0% 33%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 92%;
+  --secondary-foreground: 0 0% 33%;
+  --muted: 0 0% 90%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 0 0% 92%;
+  --accent-foreground: 0 0% 33%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 33%;
+  --input: 0 0% 33%;
+  --ring: 0 0% 33%;
+  --radius: 2rem;
+  --shell-border-w: 1px;
+  --shell-radius-outer: 2rem;
+  --shell-radius-inner: 1.5rem;
+  --shell-frame-bg: rgba(217, 217, 217, 0.5);
+  --shell-inner-bg: #d9d9d9;
+  --shell-inner-bg-white: #ffffff;
+  --shell-outer-shadow: none;
+  --shell-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  --sidebar-bg: #e5e5e5;
+  --sidebar-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+  --dock-bg: rgba(255, 255, 255, 0.92);
+  --dock-border-w: 1px;
+  --dock-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+  --modal-bg: rgba(217, 217, 217, 0.94);
+  --modal-solid-bg: #ffffff;
+  --queue-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --page-grid-bg: #CACACA;
+  --page-grid-line: transparent;
+  --pill-shadow: none;
+}
+
+html[data-theme="neo-brutal"] {
+  --tw-neo-ink: #0a0a0a;
+  --tw-neo-bg: #d5c8b3;
+  --tw-neo-surface: #f0e4d2;
+  --tw-neo-yellow: #d4b100;
+  --tw-neo-magenta: #c2185b;
+  --tw-neo-mint: #2aa98a;
+  --tw-neo-lavender: #8b74d9;
+  --neo-ink: #0a0a0a;
+  --background: 38 30% 76%;
+  --foreground: 0 0% 4%;
+  --card: 37 36% 88%;
+  --card-foreground: 0 0% 4%;
+  --popover: 37 36% 88%;
   --popover-foreground: 0 0% 4%;
   --primary: 0 0% 4%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 48 80% 88%;
+  --secondary: 43 58% 64%;
   --secondary-foreground: 0 0% 4%;
-  --muted: 48 40% 90%;
-  --muted-foreground: 0 0% 32%;
-  --accent: 286 85% 82%;
+  --muted: 36 28% 72%;
+  --muted-foreground: 0 0% 24%;
+  --accent: 270 45% 60%;
   --accent-foreground: 0 0% 4%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 0 0% 98%;
@@ -58,6 +116,205 @@
   --input: 0 0% 4%;
   --ring: 0 0% 4%;
   --radius: 0.75rem;
+  --shell-border-w: 3px;
+  --shell-radius-outer: 0.75rem;
+  --shell-radius-inner: 0.5rem;
+  --shell-frame-bg: #d4b100;
+  --shell-inner-bg: #d5c8b3;
+  --shell-inner-bg-white: #f0e4d2;
+  --shell-outer-shadow: 5px 5px 0 0 var(--neo-ink);
+  --shell-inner-shadow: none;
+  --sidebar-bg: #8b74d9;
+  --sidebar-shadow: 5px 5px 0 0 var(--neo-ink);
+  --dock-bg: #f0e4d2;
+  --dock-border-w: 3px;
+  --dock-shadow: 6px 6px 0 0 var(--neo-ink);
+  --modal-bg: rgba(213, 200, 179, 0.96);
+  --modal-solid-bg: #f0e4d2;
+  --queue-shadow: 6px 6px 0 0 var(--neo-ink);
+  --page-grid-bg: #d5c8b3;
+  --page-grid-line: rgba(10, 10, 10, 0.09);
+  --pill-shadow: 3px 3px 0 0 var(--neo-ink);
+}
+
+html[data-theme="liquid-glass"] {
+  --tw-neo-ink: #1c1c1e;
+  --tw-neo-bg: #d8e3f4;
+  --tw-neo-surface: rgba(255, 255, 255, 0.72);
+  --tw-neo-yellow: rgba(255, 204, 0, 0.85);
+  --tw-neo-magenta: #ff375f;
+  --tw-neo-mint: #30d158;
+  --tw-neo-lavender: #af52de;
+  --neo-ink: #1c1c1e;
+  --background: 218 42% 92%;
+  --foreground: 220 15% 18%;
+  --card: 220 40% 99%;
+  --card-foreground: 220 15% 18%;
+  --popover: 220 45% 99%;
+  --popover-foreground: 220 15% 18%;
+  --primary: 211 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 220 35% 94%;
+  --secondary-foreground: 220 15% 22%;
+  --muted: 220 30% 94%;
+  --muted-foreground: 220 12% 42%;
+  --accent: 211 90% 96%;
+  --accent-foreground: 211 100% 40%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 25% 88%;
+  --input: 220 25% 88%;
+  --ring: 211 100% 50%;
+  --radius: 1.25rem;
+  --shell-border-w: 1px;
+  --shell-radius-outer: 1.35rem;
+  --shell-radius-inner: 1.05rem;
+  --shell-frame-bg: rgba(255, 255, 255, 0.42);
+  --shell-inner-bg: rgba(255, 255, 255, 0.38);
+  --shell-inner-bg-white: rgba(255, 255, 255, 0.72);
+  --shell-outer-shadow:
+    0 12px 40px rgba(15, 23, 42, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.65) inset;
+  --shell-inner-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.75);
+  --sidebar-bg: rgba(255, 255, 255, 0.48);
+  --sidebar-shadow: 0 12px 48px rgba(15, 23, 42, 0.1);
+  --dock-bg: rgba(255, 255, 255, 0.52);
+  --dock-border-w: 1px;
+  --dock-shadow: 0 16px 48px rgba(15, 23, 42, 0.12), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  --modal-bg: rgba(255, 255, 255, 0.4);
+  --modal-solid-bg: rgba(255, 255, 255, 0.88);
+  --queue-shadow: 0 10px 36px rgba(15, 23, 42, 0.09);
+  --page-grid-bg: transparent;
+  --page-grid-line: transparent;
+  --pill-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+}
+
+/* Liquid Glass: mesh field + frosted tool primitives */
+html[data-theme="liquid-glass"] .neo-page-grid {
+  background-color: transparent;
+  background-image:
+    radial-gradient(ellipse 100% 80% at 10% 0%, rgba(0, 122, 255, 0.14), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 95% 15%, rgba(175, 82, 222, 0.12), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(48, 209, 88, 0.08), transparent 55%),
+    linear-gradient(168deg, #c9d8f0 0%, #dce7f8 38%, #e8f0fc 72%, #eef4fc 100%);
+  background-size: auto;
+}
+
+html[data-theme="liquid-glass"] .neo-shell-outer {
+  backdrop-filter: blur(18px) saturate(165%);
+  -webkit-backdrop-filter: blur(18px) saturate(165%);
+  border-color: rgba(255, 255, 255, 0.65);
+}
+
+html[data-theme="liquid-glass"] .neo-shell-inner {
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+html[data-theme="liquid-glass"] .neo-shell-inner--white {
+  background-color: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(16px) saturate(170%);
+  -webkit-backdrop-filter: blur(16px) saturate(170%);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+html[data-theme="liquid-glass"] .neo-sidebar {
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+html[data-theme="liquid-glass"] .neo-dock {
+  backdrop-filter: blur(24px) saturate(175%);
+  -webkit-backdrop-filter: blur(24px) saturate(175%);
+  border-color: rgba(255, 255, 255, 0.58);
+}
+
+html[data-theme="classic"] .neo-dock {
+  background-color: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(7.5px);
+  -webkit-backdrop-filter: blur(7.5px);
+  border-color: rgba(0, 0, 0, 0);
+  border-width: 0;
+  border-style: none;
+  border-image: none;
+  box-shadow: 0px 8px 28px 0px rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme="classic"] .neo-shell-outer,
+html[data-theme="classic"] .neo-shell-inner {
+  border-color: rgba(0, 0, 0, 0);
+  border-width: 0;
+  border-style: none;
+  border-image: none;
+}
+
+html[data-theme="classic"] .neo-sidebar,
+html[data-theme="classic"] .neo-queue-panel {
+  border-color: rgba(0, 0, 0, 0);
+  border-width: 0;
+  border-style: none;
+  border-image: none;
+}
+
+html[data-theme="liquid-glass"] .neo-modal-overlay {
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  background-color: rgba(255, 255, 255, 0.38);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+html[data-theme="liquid-glass"] .neo-modal-overlay--solid {
+  background-color: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(18px) saturate(165%);
+  -webkit-backdrop-filter: blur(18px) saturate(165%);
+}
+
+html[data-theme="liquid-glass"] .neo-queue-panel {
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border-color: rgba(255, 255, 255, 0.52);
+}
+
+html[data-theme="liquid-glass"] .neo-pill-tag {
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  border-color: rgba(28, 28, 30, 0.1);
+  border-width: 1px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+/* Lower compositing cost on handheld devices. */
+@media (max-width: 768px) {
+  html[data-theme="liquid-glass"] .neo-shell-outer,
+  html[data-theme="liquid-glass"] .neo-shell-inner,
+  html[data-theme="liquid-glass"] .neo-shell-inner--white,
+  html[data-theme="liquid-glass"] .neo-sidebar,
+  html[data-theme="liquid-glass"] .neo-dock,
+  html[data-theme="liquid-glass"] .neo-modal-overlay,
+  html[data-theme="liquid-glass"] .neo-modal-overlay--solid,
+  html[data-theme="liquid-glass"] .neo-queue-panel,
+  html[data-theme="liquid-glass"] .neo-pill-tag {
+    backdrop-filter: blur(8px) saturate(135%);
+    -webkit-backdrop-filter: blur(8px) saturate(135%);
+  }
+}
+
+/* Accessibility + perf fallback: skip expensive glass effects when motion is reduced. */
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="liquid-glass"] .neo-shell-outer,
+  html[data-theme="liquid-glass"] .neo-shell-inner,
+  html[data-theme="liquid-glass"] .neo-shell-inner--white,
+  html[data-theme="liquid-glass"] .neo-sidebar,
+  html[data-theme="liquid-glass"] .neo-dock,
+  html[data-theme="liquid-glass"] .neo-modal-overlay,
+  html[data-theme="liquid-glass"] .neo-modal-overlay--solid,
+  html[data-theme="liquid-glass"] .neo-queue-panel,
+  html[data-theme="liquid-glass"] .neo-pill-tag {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 
 .dark {
@@ -149,10 +406,10 @@
 
 /* Custom Soft Gradient Background */
 .bg-soft-gradient {
-  background: radial-gradient(circle at 50% 0%, #f3f4f6 0%, #ffffff 70%);
+  background: radial-gradient(circle at 50% 0%, #D9D9D9 0%, #CACACA 72%);
 }
 
-/* Global Custom Scrollbar */
+/* Global Custom Scrollbar (tint follows --neo-ink) */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -163,12 +420,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(10, 10, 10, 0.22);
+  background: color-mix(in srgb, var(--neo-ink) 22%, transparent);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(10, 10, 10, 0.35);
+  background: color-mix(in srgb, var(--neo-ink) 38%, transparent);
 }
 
 /* Utility class for containers that need a slimmer scrollbar */
@@ -178,12 +435,12 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(10, 10, 10, 0.18);
+  background: color-mix(in srgb, var(--neo-ink) 18%, transparent);
   border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(10, 10, 10, 0.28);
+  background: color-mix(in srgb, var(--neo-ink) 30%, transparent);
 }
 
 /* For dark areas specifically */
@@ -200,11 +457,11 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 3px solid var(--neo-ink);
-  border-radius: 0.75rem;
+  border: var(--shell-border-w) solid var(--neo-ink);
+  border-radius: var(--shell-radius-outer);
   padding: 0.5rem;
-  background-color: #ffe94a;
-  box-shadow: 5px 5px 0 0 var(--neo-ink);
+  background-color: var(--shell-frame-bg);
+  box-shadow: var(--shell-outer-shadow);
 }
 
 @media (min-width: 640px) {
@@ -219,28 +476,29 @@
   flex: 1;
   position: relative;
   overflow: hidden;
-  border: 3px solid var(--neo-ink);
-  border-radius: 0.5rem;
-  background-color: #fff8e8;
+  border: var(--shell-border-w) solid var(--neo-ink);
+  border-radius: var(--shell-radius-inner);
+  background-color: var(--shell-inner-bg);
+  box-shadow: var(--shell-inner-shadow);
 }
 
 .neo-shell-inner--white {
-  background-color: #ffffff;
+  background-color: var(--shell-inner-bg-white);
 }
 
 .neo-page-grid {
-  background-color: #fff8e8;
+  background-color: var(--page-grid-bg);
   background-image:
-    linear-gradient(rgba(10, 10, 10, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(10, 10, 10, 0.06) 1px, transparent 1px);
+    linear-gradient(var(--page-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--page-grid-line) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
 .neo-sidebar {
-  border: 3px solid var(--neo-ink);
-  border-radius: 0.75rem;
-  background-color: #c5b4fc;
-  box-shadow: 5px 5px 0 0 var(--neo-ink);
+  border: var(--shell-border-w) solid var(--neo-ink);
+  border-radius: var(--shell-radius-outer);
+  background-color: var(--sidebar-bg);
+  box-shadow: var(--sidebar-shadow);
 }
 
 .neo-dock {
@@ -250,10 +508,10 @@
   transform: translateX(-50%);
   width: 94%;
   z-index: 20;
-  border: 3px solid var(--neo-ink);
-  border-radius: 0.5rem;
-  background-color: #ffffff;
-  box-shadow: 6px 6px 0 0 var(--neo-ink);
+  border: var(--dock-border-w) solid var(--neo-ink);
+  border-radius: var(--shell-radius-inner);
+  background-color: var(--dock-bg);
+  box-shadow: var(--dock-shadow);
 }
 
 @media (min-width: 640px) {
@@ -270,14 +528,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 3px solid var(--neo-ink);
-  border-radius: 0.5rem;
-  background-color: rgba(255, 248, 232, 0.96);
+  border: var(--shell-border-w) solid var(--neo-ink);
+  border-radius: var(--shell-radius-inner);
+  background-color: var(--modal-bg);
   color: var(--neo-ink);
 }
 
 .neo-modal-overlay--solid {
-  background-color: #ffffff;
+  background-color: var(--modal-solid-bg);
 }
 
 .neo-queue-panel {
@@ -285,10 +543,10 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
-  border: 3px solid var(--neo-ink);
+  border: var(--shell-border-w) solid var(--neo-ink);
   border-radius: 1rem;
-  background-color: #ffffff;
-  box-shadow: 6px 6px 0 0 var(--neo-ink);
+  background-color: var(--modal-solid-bg);
+  box-shadow: var(--queue-shadow);
 }
 
 .neo-pill-tag {
@@ -296,13 +554,13 @@
   align-items: center;
   gap: 0.35rem;
   border: 2px solid var(--neo-ink);
-  background: #ffffff;
+  background: var(--modal-solid-bg);
   padding: 0.35rem 0.75rem;
   font-size: 0.5625rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  box-shadow: 3px 3px 0 0 var(--neo-ink);
+  box-shadow: var(--pill-shadow);
 }
 
 /* ========== LANDING (custom page) ========== */

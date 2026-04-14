@@ -29,7 +29,7 @@ export default function IconSetPage() {
                             IconSet
                         </h1>
                         <p className="mt-1 text-base sm:text-xl md:text-2xl lg:text-4xl font-medium leading-tight text-primary/80">
-                            Craft perfect app icons and favicons in seconds.
+                            Your logo, in every icon size.
                         </p>
                     </header>
 

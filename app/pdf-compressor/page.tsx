@@ -23,7 +23,7 @@ export default function PdfCompressorPage() {
                             PDFPress
                         </h1>
                         <p className="mt-1 text-base sm:text-xl md:text-2xl lg:text-4xl font-medium leading-tight text-primary/80">
-                            Compress PDFs securely in your browser.
+                            Your PDFs, only lighter.
                         </p>
                     </header>
 

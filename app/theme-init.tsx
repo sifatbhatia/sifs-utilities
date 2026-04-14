@@ -1,0 +1,1 @@
+export const THEME_INIT_SCRIPT = `(function(){try{var k='sifutils-theme',a=['classic','neo-brutal','liquid-glass'],t=localStorage.getItem(k);if(t==='retrofuture'){t='liquid-glass';try{localStorage.setItem(k,t);}catch(e){}}document.documentElement.dataset.theme=a.indexOf(t)>=0?t:'classic';}catch(e){document.documentElement.dataset.theme='classic';}})();`;

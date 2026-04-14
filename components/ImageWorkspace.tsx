@@ -12,11 +12,15 @@ import BatchQueue from './BatchQueue';
 import { usePix } from '@/app/pixsqueeze/PixContext';
 import Link from 'next/link';
 import PremiumSlider from './PremiumSlider';
+import { useTheme } from '@/components/theme/ThemeProvider';
+import { workspaceChrome } from '@/lib/marketingChrome';
 
 // ControlPanel removed
 
 
 export default function ImageWorkspace() {
+    const { theme } = useTheme();
+    const w = workspaceChrome(theme);
     const {
         files,
         setFiles,
@@ -88,22 +92,21 @@ export default function ImageWorkspace() {
                     >
                         {/* LEFT COLUMN: Preview + Controls */}
                         <div className="flex flex-col gap-4 min-h-0 flex-1 relative">
-                            <div className="neo-shell-outer">
-                                <div className="neo-shell-inner w-full h-full overflow-hidden relative flex-1 flex items-center justify-center group/main">
+                            <div
+                                className="neo-shell-outer border-0 w-full h-full overflow-hidden relative flex-1 flex flex-col items-center justify-start group/main shadow-[0px_24px_48px_0px_rgba(0,0,0,0.36),0px_8px_18px_0px_rgba(0,0,0,0.26),inset_0px_1px_0px_0px_rgba(255,255,255,0.34),inset_0px_-10px_18px_0px_rgba(0,0,0,0.16)]"
+                                onMouseDown={() => setShowOriginal(true)}
+                                onMouseUp={() => setShowOriginal(false)}
+                                onMouseLeave={() => setShowOriginal(false)}
+                                onTouchStart={() => setShowOriginal(true)}
+                                onTouchEnd={() => setShowOriginal(false)}
+                            >
                                     {originalUrl ? (
-                                        <div
-                                            className="relative w-full h-full flex items-center justify-center cursor-pointer p-4 group"
-                                            onMouseDown={() => setShowOriginal(true)}
-                                            onMouseUp={() => setShowOriginal(false)}
-                                            onMouseLeave={() => setShowOriginal(false)}
-                                            onTouchStart={() => setShowOriginal(true)}
-                                            onTouchEnd={() => setShowOriginal(false)}
-                                        >
+                                        <>
                                             <img
                                                 src={showOriginal ? originalUrl : (processedUrl || originalUrl)}
                                                 alt="Preview"
                                                 className={clsx(
-                                                    "max-w-full max-h-full object-contain pointer-events-none select-none transition-all duration-500",
+                                                    "max-w-[86%] max-h-[86%] sm:max-w-[82%] sm:max-h-[82%] object-contain pointer-events-none select-none transition-all duration-500 p-4 cursor-pointer",
                                                     !processedUrl && "opacity-30 blur-xl grayscale"
                                                 )}
                                             />
@@ -115,39 +118,38 @@ export default function ImageWorkspace() {
                                                         className="absolute inset-0 flex flex-col items-center justify-center gap-3"
                                                     >
                                                         <Loader2 className="w-10 h-10 text-black/20 animate-spin" />
-                                                        <span className="text-[9px] font-bold uppercase tracking-tight text-zinc-400 animate-pulse">Developing</span>
+                                                        <span className="text-[9px] font-bold uppercase tracking-tight text-zinc-400 animate-pulse">Processing</span>
                                                     </motion.div>
                                                 )}
                                             </AnimatePresence>
 
                                             {processedUrl && (
-                                                <div className="absolute top-4 left-1/2 -translate-x-1/2 neo-pill-tag opacity-0 pointer-events-none transition-all scale-90 group-hover:scale-100 group-hover:opacity-100">
+                                                <div className="absolute top-4 left-1/2 -translate-x-1/2 neo-pill-tag opacity-0 pointer-events-none transition-all scale-90 group-hover/main:scale-100 group-hover/main:opacity-100">
                                                     <Info size={12} className="text-black/40" />
                                                     <span className="text-[9px] font-black uppercase tracking-tight text-neo-ink/70">
                                                         {showOriginal ? 'Original' : 'Hold to compare'}
                                                     </span>
                                                 </div>
                                             )}
-                                        </div>
+                                        </>
                                     ) : (
                                         <div className="flex flex-col items-center gap-4 text-black/5">
                                             <Plus className="w-16 h-16" />
-                                            <p className="text-[10px] font-bold uppercase tracking-tight">Awaiting Input</p>
+                                            <p className="text-[10px] font-bold uppercase tracking-tight">No Preview</p>
                                         </div>
                                     )}
 
-                                    <motion.button
-                                        whileHover={{ scale: 1.1, rotate: 90 }}
-                                        whileTap={{ scale: 0.9 }}
-                                        onClick={() => setFiles([])}
-                                        className="absolute top-4 right-4 z-10 bg-black/5 hover:bg-black/10 text-black/30 hover:text-black p-2.5 rounded-full transition-all border border-black/5"
-                                    >
-                                        <X className="w-5 h-5" />
-                                    </motion.button>
-                                </div>
+                                <motion.button
+                                    whileHover={{ scale: 1.1, rotate: 90 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={() => setFiles([])}
+                                    className="absolute top-4 right-4 z-10 bg-black/5 hover:bg-black/10 text-black/30 hover:text-black p-2.5 rounded-full transition-all border border-black/5 shadow-[0px_8px_20px_0px_rgba(0,0,0,0.14),inset_0px_1px_0px_0px_rgba(255,255,255,0.35)] hover:shadow-[0px_10px_24px_0px_rgba(0,0,0,0.18),inset_0px_1px_0px_0px_rgba(255,255,255,0.45)]"
+                                >
+                                    <X className="w-5 h-5" />
+                                </motion.button>
 
                                 {/* Compact Controls - Liquid Glass */}
-                                <div className="neo-dock max-w-[840px] p-3 sm:p-5 flex flex-col sm:flex-row items-center gap-4 sm:gap-10">
+                                <div className="neo-dock max-w-[840px] p-3 sm:p-5 flex flex-col sm:flex-row items-center gap-4 sm:gap-10 backdrop-blur-xl shadow-[0px_18px_36px_0px_rgba(0,0,0,0.16),0px_2px_8px_0px_rgba(0,0,0,0.08),inset_0px_1px_0px_0px_rgba(255,255,255,0.36)]">
 
                                     {/* Size Info */}
                                     <div className="flex flex-row sm:flex-col items-center sm:items-start justify-between sm:justify-center shrink-0 w-full sm:w-auto min-w-[110px]">
@@ -175,8 +177,8 @@ export default function ImageWorkspace() {
                                             icon={<Settings2 className="w-3" />}
                                             onChange={() => { }}
                                             onAfterChange={(v) => setQuality(v)}
-                                            labelColor="text-zinc-500"
-                                            valueColor="text-zinc-800"
+                                            labelColor={theme === "neo-brutal" ? "text-neo-ink/50" : "text-zinc-400"}
+                                            valueColor={theme === "neo-brutal" ? "text-neo-ink" : "text-zinc-800"}
                                         />
 
                                         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
@@ -190,8 +192,14 @@ export default function ImageWorkspace() {
                                                     className={clsx(
                                                         "px-3.5 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-tight transition-all shrink-0 border",
                                                         format === f
-                                                            ? "bg-black text-white border-black shadow-[0_0_20px_rgba(0,0,0,0.1)]"
-                                                            : "bg-black/5 text-black/30 border-black/5 hover:bg-black/10 hover:text-black/60"
+                                                            ? (theme === "classic"
+                                                                ? "bg-[#575757] text-white border-[#575757]"
+                                                                : theme === "liquid-glass"
+                                                                    ? "bg-neutral-900 text-white border-neutral-900"
+                                                                    : "bg-neo-ink text-white border-neo-ink")
+                                                            : (theme === "neo-brutal"
+                                                                ? "bg-white text-neo-ink/65 border-neo-ink/20 hover:bg-neo-bg hover:text-neo-ink"
+                                                                : "bg-black/5 text-black/30 border-black/5 hover:bg-black/10 hover:text-black/60")
                                                     )}
                                                 >
                                                     {f === 'jpeg' ? 'JPG' : f}
@@ -207,7 +215,7 @@ export default function ImageWorkspace() {
                                             whileTap={{ scale: 0.98 }}
                                             onClick={handleDownloadAll}
                                             disabled={isBatchProcessing || files.length === 0}
-                                            className="w-full bg-zinc-700 text-white px-8 py-3.5 rounded-[20px] font-bold text-[11px] sm:text-xs uppercase tracking-tight flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all shadow-xl border border-white/10 disabled:opacity-30"
+                                            className={clsx(w.runPrimary, "w-full px-8 py-3.5 rounded-[20px] text-[11px] sm:text-xs")}
                                         >
                                             <Download className="w-3.5 h-3.5" /> Export
                                         </motion.button>
@@ -218,12 +226,12 @@ export default function ImageWorkspace() {
 
                         {/* RIGHT COLUMN: Sidebar (Queue) */}
                         <div className={clsx(
-                            "flex flex-col neo-sidebar overflow-hidden min-h-0",
+                            "flex flex-col neo-sidebar border-0 overflow-hidden min-h-0",
                             showQueue ? "fixed inset-4 z-50 lg:relative lg:inset-auto" : "hidden lg:flex",
                             "lg:h-full"
                         )}>
-                            <div className="p-5 shrink-0 flex items-center justify-between border-b border-black/10 bg-black/5">
-                                <h3 className="text-sm font-bold text-zinc-800 uppercase tracking-tight">Queue</h3>
+                            <div className="p-5 shrink-0 flex items-center justify-between bg-black/5">
+                                <h3 className={clsx("text-sm font-bold uppercase tracking-tight", theme === "neo-brutal" ? "text-neo-ink" : "text-zinc-800")}>Queue</h3>
                                 <div className="flex items-center gap-2">
                                     <div className="text-[10px] font-bold text-zinc-400 bg-zinc-100 px-2.5 py-1 rounded-full uppercase tracking-tight">{files.length}</div>
                                     <button onClick={() => setShowQueue(false)} className="lg:hidden p-1.5 rounded-full hover:bg-black/10 transition-colors">
@@ -243,7 +251,14 @@ export default function ImageWorkspace() {
                         {/* Mobile Queue Button */}
                         <button
                             onClick={() => setShowQueue(true)}
-                            className="fixed safe-fab z-40 lg:hidden w-12 h-12 min-w-12 min-h-12 bg-zinc-700 text-white rounded-full shadow-xl flex items-center justify-center hover:bg-zinc-800 active:scale-95 transition-all border border-white/10 touch-manipulation"
+                            className={clsx(
+                                "fixed safe-fab z-40 lg:hidden w-12 h-12 min-w-12 min-h-12 rounded-full shadow-xl flex items-center justify-center active:scale-95 transition-all touch-manipulation",
+                                theme === "classic"
+                                    ? "bg-[#575757] text-white hover:bg-[#4d4d4d]"
+                                    : theme === "liquid-glass"
+                                        ? "bg-neutral-900 text-white hover:bg-neutral-800 border border-white/10"
+                                        : "bg-neo-ink text-white hover:bg-neo-ink/90 border-[3px] border-neo-ink"
+                            )}
                         >
                             <List className="w-5 h-5" />
                         </button>

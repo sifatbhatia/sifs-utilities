@@ -9,6 +9,7 @@ import { useGSAP } from "@gsap/react";
 import {
   ArrowRight,
   ChevronRight,
+  Hammer,
   LayoutGrid,
   Shield,
   Sparkles,
@@ -16,6 +17,10 @@ import {
 } from "lucide-react";
 import type { SiteTool } from "@/data/siteTools";
 import { SITE_TOOLS } from "@/data/siteTools";
+import ThemeHint from "@/components/theme/ThemeHint";
+import ThemeSwitcher from "@/components/theme/ThemeSwitcher";
+import { useTheme } from "@/components/theme/ThemeProvider";
+import { bentoTileChrome, landingChrome } from "@/lib/marketingChrome";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -35,6 +40,7 @@ const BENTO_ORDER = [
   { name: "GrainPix" as const, grid: "col-span-12 md:col-span-4 md:row-start-4 min-h-[170px]" },
   { name: "IconSet" as const, grid: "col-span-12 md:col-span-4 md:col-start-5 md:row-start-4 min-h-[170px]" },
 ] as const;
+const LANDING_TOOL_LIMIT = 3;
 
 const MARQUEE = [
   ...SITE_TOOLS.map((t) => t.name),
@@ -45,7 +51,7 @@ const MARQUEE = [
   "Fast",
 ];
 
-const PILLARS = [
+const PILLARS_NEO = [
   {
     title: "Tired of those other sites?",
     body: "So was I — half the utilities online feel abandoned, half bury you in ads and trackers, and plenty still load like it’s 2012. This suite is the opposite: quick to open, easy to read, and kept current.",
@@ -63,37 +69,43 @@ const PILLARS = [
   },
 ] as const;
 
+const PILLARS_CLASSIC = [
+  PILLARS_NEO[0],
+  PILLARS_NEO[1],
+  {
+    title: "Calm, readable chrome",
+    body: "Soft contrast, comfortable type, and simple surfaces — the same understated layout from this page through the hub and into each workspace. No gimmicks, just tools that stay out of your way.",
+    icon: Sparkles,
+  },
+] as const;
+
 function BentoTile({
   t,
   className,
   featured,
+  tile,
 }: {
   t: SiteTool;
   className?: string;
   featured?: boolean;
+  tile: ReturnType<typeof bentoTileChrome>;
 }) {
   const Icon = t.Icon;
   return (
     <Link
       href={t.href}
       className={clsx(
-        "lp-reveal group relative block touch-manipulation focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neo-ink",
+        "lp-reveal group relative block touch-manipulation focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4",
+        tile.focusRing,
         className,
       )}
     >
-      <div
-        className={clsx(
-          "flex h-full min-h-[inherit] flex-col rounded-xl border-[3px] border-neo-ink bg-white p-5 shadow-[6px_6px_0_0_#0a0a0a] transition-[transform,box-shadow] duration-150 sm:p-6 md:p-7",
-          "hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_#0a0a0a] active:translate-x-1 active:translate-y-1",
-        )}
-      >
+      <div className={clsx(tile.card, tile.cardHover)}>
         <div className="flex items-start justify-between gap-3">
-          <span className="text-[9px] font-black uppercase tracking-[0.28em] text-neo-ink/50 sm:text-[10px]">
-            Tool
-          </span>
+          <span className={tile.label}>Tool</span>
           <div
             className={clsx(
-              "flex shrink-0 items-center justify-center border-[3px] border-neo-ink",
+              tile.iconFrame,
               featured ? "h-12 w-12 sm:h-14 sm:w-14" : "h-10 w-10 sm:h-11 sm:w-11",
               t.iconBg,
             )}
@@ -107,7 +119,7 @@ function BentoTile({
         <div className="mt-auto pt-6 sm:pt-8">
           <h3
             className={clsx(
-              "font-black tracking-tight text-neo-ink",
+              tile.title,
               featured ? "text-2xl sm:text-3xl md:text-4xl" : "text-lg sm:text-xl md:text-2xl",
             )}
           >
@@ -115,13 +127,13 @@ function BentoTile({
           </h3>
           <p
             className={clsx(
-              "mt-1.5 font-semibold leading-relaxed text-neo-ink/65 sm:mt-2",
+              tile.desc,
               featured ? "text-sm sm:text-base max-w-md" : "text-xs sm:text-sm line-clamp-2 md:line-clamp-none",
             )}
           >
             {t.description}
           </p>
-          <span className="mt-4 inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-neo-ink opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:text-xs">
+          <span className={tile.openHint}>
             Open
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
           </span>
@@ -133,6 +145,10 @@ function BentoTile({
 
 export default function LandingPage() {
   const root = useRef<HTMLElement>(null);
+  const { theme } = useTheme();
+  const lp = landingChrome(theme);
+  const tile = bentoTileChrome(theme);
+  const pillars = lp.c ? PILLARS_CLASSIC : PILLARS_NEO;
 
   useGSAP(
     () => {
@@ -145,9 +161,9 @@ export default function LandingPage() {
         return;
       }
 
-      gsap.set(".lp-hero-line-inner", { yPercent: 108 });
+      gsap.set(".lp-hero-line-inner", { yPercent: 108, filter: "blur(16px)", opacity: 0.15 });
       gsap.set(".lp-nav", { opacity: 0, y: -16 });
-      gsap.set(".lp-fade", { opacity: 0, y: 32 });
+      gsap.set(".lp-fade", { opacity: 0, y: 32, filter: "blur(12px)" });
       gsap.set(".lp-hero-cta", { opacity: 0, y: 24 });
       gsap.set(".lp-reveal", { opacity: 0, y: 48 });
       gsap.set(".lp-pillar", { opacity: 0, y: 40 });
@@ -155,8 +171,8 @@ export default function LandingPage() {
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
       tl.to(".lp-nav", { opacity: 1, y: 0, duration: 0.55 }, 0)
-        .to(".lp-hero-line-inner", { yPercent: 0, duration: 0.92, stagger: 0.12 }, 0.08)
-        .to(".lp-fade", { opacity: 1, y: 0, duration: 0.58, stagger: 0.07 }, "-=0.42")
+        .to(".lp-hero-line-inner", { yPercent: 0, filter: "blur(0px)", opacity: 1, duration: 0.92, stagger: 0.12 }, 0.08)
+        .to(".lp-fade", { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.58, stagger: 0.07 }, "-=0.42")
         .to(".lp-hero-cta", { opacity: 1, y: 0, duration: 0.52, stagger: 0.07 }, "-=0.38");
 
       ScrollTrigger.batch(".lp-reveal", {
@@ -214,85 +230,81 @@ export default function LandingPage() {
   const doubledMarquee = [...MARQUEE, ...MARQUEE];
 
   return (
-    <main
-      ref={root}
-      className="relative min-h-dvh bg-neo-bg font-sans text-foreground selection:bg-neo-ink selection:text-white neo-page-grid"
-    >
-      <nav className="lp-nav sticky top-0 z-50 border-b-[3px] border-neo-ink bg-neo-yellow shadow-[0_4px_0_0_#0a0a0a]">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4 md:px-10 pt-[max(0.5rem,env(safe-area-inset-top,0px))]">
-          <Link
-            href="/"
-            className="flex min-h-11 min-w-11 items-center gap-2.5 touch-manipulation focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neo-ink sm:gap-3"
-          >
-            <span className="flex h-9 w-9 items-center justify-center border-[3px] border-neo-ink bg-white shadow-[3px_3px_0_0_#0a0a0a] sm:h-10 sm:w-10">
-              <LayoutGrid className="h-4 w-4 text-neo-ink sm:h-[18px] sm:w-[18px]" strokeWidth={2.25} />
-            </span>
-            <span className="hidden text-sm font-black tracking-tight text-neo-ink sm:inline sm:text-base">
-              {"Sif's Utilities"}
-            </span>
-          </Link>
-          <Link
-            href="/sif/utils"
-            className="inline-flex min-h-11 items-center gap-2 border-[3px] border-neo-ink bg-neo-ink px-4 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-[4px_4px_0_0_#62f5cd] transition-transform hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0_0_#62f5cd] active:translate-x-1 active:translate-y-1 touch-manipulation sm:px-6 sm:text-xs"
-          >
-            Hub
-            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-          </Link>
+    <main ref={root} className={lp.main}>
+      <nav className={lp.nav}>
+        <div className="mx-auto flex max-w-[1600px] flex-col gap-2 px-4 py-3 sm:px-6 sm:py-4 md:px-10 pt-[max(0.5rem,env(safe-area-inset-top,0px))]">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Link
+              href="/"
+              className={clsx(
+                "flex min-h-11 min-w-11 items-center gap-2.5 touch-manipulation focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 sm:gap-3",
+                lp.focusRing,
+              )}
+            >
+              <span className={lp.logoMark}>
+                <Hammer
+                  className={clsx("h-4 w-4 sm:h-[18px] sm:w-[18px]", lp.deckIcon)}
+                  strokeWidth={2.25}
+                />
+              </span>
+              <span className={lp.brandWordmark}>{"Sif's Utilities"}</span>
+            </Link>
+            <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-3">
+              <ThemeSwitcher variant="toolbar" />
+              <Link href="/sif/utils" className={lp.hubBtn}>
+                Hub
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+              </Link>
+            </div>
+          </div>
+          <ThemeHint className={lp.hintRule} />
         </div>
       </nav>
 
       {/* Hero */}
       <section className="relative z-10 flex min-h-[min(100dvh,56rem)] flex-col justify-center px-4 pb-14 pt-6 sm:px-6 sm:pb-20 sm:pt-10 md:px-10 md:pb-28 md:pt-14">
         <div className="mx-auto max-w-[1600px]">
-          <p className="lp-fade mb-4 inline-block border-[3px] border-neo-ink bg-neo-mint px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.28em] text-neo-ink shadow-[3px_3px_0_0_#0a0a0a] sm:mb-6 sm:text-[11px]">
-            Browser-native suite
-          </p>
+            <p className={lp.heroKicker}>Browser-native suite</p>
 
-          <div className="max-w-[min(100%,52rem)] lg:max-w-[min(100%,64rem)]">
-            <h1 className="text-[2.75rem] font-black leading-[0.88] tracking-[-0.06em] text-neo-ink sm:text-6xl md:text-7xl lg:text-[min(6.5rem,9.2vw)]">
-              <span className="lp-hero-line block overflow-hidden pb-[0.06em]">
-                <span className="lp-hero-line-inner block">Sif&apos;s</span>
-              </span>
-              <span className="lp-hero-line block overflow-hidden pb-[0.06em]">
-                <span className="lp-hero-line-inner block">Utilities</span>
-              </span>
-            </h1>
-          </div>
+            <div className="max-w-[min(100%,52rem)] lg:max-w-[min(100%,64rem)]">
+              <h1 className={lp.h1}>
+                <span className="lp-hero-line block overflow-hidden pb-[0.06em]">
+                  <span className="lp-hero-line-inner block">Sif&apos;s</span>
+                </span>
+                <span className="lp-hero-line block overflow-hidden pb-[0.06em]">
+                  <span className="lp-hero-line-inner block">Utilities</span>
+                </span>
+              </h1>
+            </div>
 
-          <p className="lp-fade mt-6 max-w-xl text-base font-semibold leading-relaxed text-neo-ink/70 sm:mt-8 sm:text-lg md:max-w-2xl md:text-xl">
-            Compress, transcode, crop, scrub metadata, tune exports — eight focused workspaces with
-            one shared design language, without the usual crawl through slow, ad-heavy, or
-            half-forgotten utility sites.
-          </p>
+            <p className={lp.heroLead}>
+              {lp.c
+                ? "Compress, transcode, crop, scrub metadata, tune exports — eight focused workspaces in one place, without the usual crawl through slow, ad-heavy, or half-forgotten utility sites."
+                : "Compress, transcode, crop, scrub metadata, tune exports — eight focused workspaces with one shared design language, without the usual crawl through slow, ad-heavy, or half-forgotten utility sites."}
+            </p>
 
-          <div className="lp-hero-cta mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center">
-            <Link
-              href="/sif/utils"
-              className="inline-flex min-h-[3rem] items-center justify-center gap-2.5 border-[3px] border-neo-ink bg-neo-ink px-8 py-3 text-sm font-black uppercase tracking-wide text-white shadow-[6px_6px_0_0_#ffe94a] transition-transform hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_#ffe94a] active:translate-x-1 active:translate-y-1 touch-manipulation sm:min-h-[3.25rem] sm:text-base"
-            >
-              Open the hub
-              <ArrowRight className="h-5 w-5" aria-hidden />
-            </Link>
-            <a
-              href="#suite"
-              className="inline-flex min-h-[3rem] items-center justify-center border-[3px] border-neo-ink bg-white px-8 py-3 text-sm font-black uppercase tracking-wide text-neo-ink shadow-[6px_6px_0_0_#0a0a0a] transition-transform hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_#0a0a0a] touch-manipulation sm:min-h-[3.25rem] sm:text-base"
-            >
-              Browse the suite
-            </a>
-          </div>
+            <div className="lp-hero-cta mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center">
+              <Link href="/sif/utils" className={lp.heroPrimaryCta}>
+                Open the hub
+                <ArrowRight className="h-5 w-5" aria-hidden />
+              </Link>
+              <a href="#suite" className={lp.heroGhostCta}>
+                Browse the suite
+              </a>
+            </div>
 
           {/* Mobile: horizontal snap picks */}
           <div
             className="lp-scroll-hint lp-fade mt-10 flex gap-3 overflow-x-auto pb-3 pl-1 sm:mt-12 md:hidden"
             aria-label="Featured tools"
           >
-            {SITE_TOOLS.slice(0, 6).map((t) => {
+            {SITE_TOOLS.slice(0, LANDING_TOOL_LIMIT).map((t) => {
               const Icon = t.Icon;
               return (
                 <Link
                   key={t.href}
                   href={t.href}
-                  className="flex w-[min(17.5rem,calc(100vw-2.5rem))] shrink-0 touch-manipulation flex-col rounded-xl border-[3px] border-neo-ink bg-white p-4 shadow-[5px_5px_0_0_#0a0a0a] transition-transform active:translate-x-0.5 active:translate-y-0.5"
+                  className={lp.mobilePickCard}
                 >
                   <div
                     className={clsx(
@@ -302,9 +314,9 @@ export default function LandingPage() {
                   >
                     <Icon className={clsx("h-5 w-5", t.iconClass)} strokeWidth={1.5} />
                   </div>
-                  <p className="font-black text-neo-ink">{t.name}</p>
-                  <p className="mt-1 line-clamp-2 text-xs font-semibold text-neo-ink/60">{t.description}</p>
-                  <span className="mt-3 inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-neo-ink">
+                  <p className={lp.mobilePickTitle}>{t.name}</p>
+                  <p className={lp.mobilePickDesc}>{t.description}</p>
+                  <span className={clsx(lp.mobilePickOpen, "gap-1")}>
                     Open <ChevronRight className="h-3.5 w-3.5" />
                   </span>
                 </Link>
@@ -315,27 +327,18 @@ export default function LandingPage() {
       </section>
 
       {/* Marquee */}
-      <div className="relative z-10 border-y-[3px] border-neo-ink bg-neo-magenta py-3 sm:py-4">
+      <div className={lp.marqueeStrip}>
         <div className="overflow-hidden">
           <div className="lp-marquee-track items-center pr-10 sm:pr-14">
             {doubledMarquee.map((label, i) => (
-              <span
-                key={`${label}-${i}`}
-                className="shrink-0 text-[10px] font-black uppercase tracking-[0.32em] text-white sm:text-[11px]"
-              >
+              <span key={`${label}-${i}`} className={lp.marqueeText}>
                 {label}
               </span>
             ))}
           </div>
         </div>
-        <div
-          className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-neo-magenta to-transparent sm:w-20"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-neo-magenta to-transparent sm:w-20"
-          aria-hidden
-        />
+        <div className={lp.marqueeFadeL} aria-hidden />
+        <div className={lp.marqueeFadeR} aria-hidden />
       </div>
 
       {/* Bento */}
@@ -345,70 +348,52 @@ export default function LandingPage() {
       >
         <div className="mx-auto max-w-[1600px]">
           <div className="mb-10 max-w-2xl sm:mb-14 md:mb-16">
-            <p className="lp-reveal inline-block border-[3px] border-neo-ink bg-white px-2 py-1 text-[10px] font-black uppercase tracking-[0.32em] text-neo-ink shadow-[3px_3px_0_0_#0a0a0a] sm:text-[11px]">
-              The suite
-            </p>
-            <h2 className="lp-reveal mt-3 text-3xl font-black leading-[0.92] tracking-[-0.05em] text-neo-ink sm:text-4xl md:text-5xl lg:text-6xl">
-              Eight tools.
+            <p className={lp.suiteKicker}>The suite</p>
+            <h2 className={lp.suiteH2}>
+              Featured tools.
               <br />
               Built to match.
             </h2>
-            <p className="lp-reveal mt-4 text-base font-semibold leading-relaxed text-neo-ink/70 sm:text-lg">
-              Tiles scale with the viewport; on desktop the grid opens up. Every link goes straight
-              into the live workspace.
+            <p className={lp.suiteLead}>
+              A quick preview from the suite. Open any card now, or jump to the full hub to browse
+              everything.
             </p>
           </div>
 
           <div className="grid grid-cols-12 gap-3 sm:gap-4">
-            {BENTO_ORDER.map((item) => (
+            {BENTO_ORDER.slice(0, LANDING_TOOL_LIMIT).map((item) => (
               <BentoTile
                 key={item.name}
                 t={toolByName(item.name)}
                 className={item.grid}
                 featured={"featured" in item && item.featured === true}
+                tile={tile}
               />
             ))}
-            <Link
-              href="/sif/utils"
-              className="lp-reveal col-span-12 flex min-h-[160px] touch-manipulation flex-col justify-between rounded-xl border-[3px] border-dashed border-neo-ink bg-neo-lavender p-6 shadow-[6px_6px_0_0_#0a0a0a] transition-transform hover:translate-x-0.5 hover:translate-y-0.5 sm:min-h-[170px] md:col-span-4 md:col-start-9 md:row-start-4 md:min-h-[170px]"
-            >
-              <LayoutGrid className="h-8 w-8 text-neo-ink" strokeWidth={2} aria-hidden />
-              <div>
-                <p className="text-lg font-black text-neo-ink sm:text-xl">Full hub grid</p>
-                <p className="mt-1 text-sm font-semibold text-neo-ink/75">
-                  Prefer the classic two-column tool wall? It&apos;s one tap away.
-                </p>
-                <span className="mt-4 inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-neo-ink">
-                  Open hub
-                  <ArrowRight className="h-4 w-4" />
-                </span>
-              </div>
+          </div>
+          <div className="mt-6 flex justify-center sm:mt-8">
+            <Link href="/sif/utils" className={lp.heroPrimaryCta}>
+              View all tools
+              <LayoutGrid className="h-5 w-5" aria-hidden />
             </Link>
           </div>
         </div>
       </section>
 
       {/* Pillars */}
-      <section className="relative z-10 border-t-[3px] border-neo-ink bg-neo-mint/40 px-4 py-16 sm:px-6 sm:py-20 md:px-10 md:py-24">
+      <section className={lp.pillarsSection}>
         <div className="mx-auto max-w-[1600px]">
-          <h2 className="lp-reveal text-center text-2xl font-black tracking-[-0.04em] text-neo-ink sm:text-3xl md:text-4xl">
-            Why this exists
-          </h2>
+          <h2 className={lp.pillarsH2}>Why this exists</h2>
           <div className="mt-10 grid gap-4 sm:mt-14 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
-            {PILLARS.map((p) => {
+            {pillars.map((p) => {
               const Icon = p.icon;
               return (
-                <div
-                  key={p.title}
-                  className="lp-pillar rounded-xl border-[3px] border-neo-ink bg-white p-6 shadow-[6px_6px_0_0_#0a0a0a] sm:p-8"
-                >
-                  <div className="mb-5 flex h-11 w-11 items-center justify-center border-[3px] border-neo-ink bg-neo-yellow text-neo-ink shadow-[3px_3px_0_0_#0a0a0a] sm:h-12 sm:w-12">
+                <div key={p.title} className={lp.pillarCard}>
+                  <div className={lp.pillarIconWrap}>
                     <Icon className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
                   </div>
-                  <h3 className="text-lg font-black text-neo-ink sm:text-xl">{p.title}</h3>
-                  <p className="mt-2 text-sm font-semibold leading-relaxed text-neo-ink/70 sm:text-base">
-                    {p.body}
-                  </p>
+                  <h3 className={lp.pillarH3}>{p.title}</h3>
+                  <p className={lp.pillarBody}>{p.body}</p>
                 </div>
               );
             })}
@@ -418,43 +403,37 @@ export default function LandingPage() {
 
       {/* CTA */}
       <section className="relative z-10 px-4 py-16 sm:px-6 sm:py-20 md:px-10 md:py-24">
-        <div className="lp-cta-inner relative mx-auto max-w-[1600px] overflow-hidden rounded-xl border-[3px] border-neo-ink bg-neo-ink px-6 py-12 text-center shadow-[8px_8px_0_0_#ff2d7a] sm:px-10 sm:py-16 md:py-20">
-          <h2 className="relative text-2xl font-black leading-tight tracking-[-0.03em] text-white sm:text-3xl md:text-4xl lg:text-5xl">
-            Pick up where you left off
-          </h2>
-          <p className="relative mx-auto mt-4 max-w-md text-sm font-semibold text-white/80 sm:text-base">
-            The hub keeps every utility in one loud-clear grid — thumb reach on phones, wide layout
-            on desktop.
+        <div className={lp.ctaBox}>
+          <h2 className={lp.ctaH2}>Pick up where you left off</h2>
+          <p className={lp.ctaLead}>
+            {lp.c
+              ? "The hub lists every utility in one grid — easy on phones, spacious on desktop."
+              : "The hub keeps every utility in one loud-clear grid — thumb reach on phones, wide layout on desktop."}
           </p>
-          <Link
-            href="/sif/utils"
-            className="relative mt-8 inline-flex min-h-12 items-center gap-2 border-[3px] border-neo-ink bg-neo-yellow px-8 py-3.5 text-sm font-black uppercase tracking-wide text-neo-ink shadow-[4px_4px_0_0_#ffffff] transition-transform hover:translate-x-0.5 hover:translate-y-0.5 touch-manipulation sm:mt-10 sm:min-h-14 sm:px-10"
-          >
+          <Link href="/sif/utils" className={lp.ctaBtn}>
             Enter the hub
             <ArrowRight className="h-5 w-5" aria-hidden />
           </Link>
         </div>
       </section>
 
-      <footer className="relative z-10 border-t-[3px] border-neo-ink bg-neo-bg px-4 py-10 sm:px-6 md:px-10 pb-[max(2.5rem,env(safe-area-inset-bottom,0px))]">
+      <footer className={lp.footer}>
         <div className="mx-auto flex max-w-[1600px] flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
-          <p className="text-xs font-black text-neo-ink/60">
-            {"Sif's Utilities"} · Next.js
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[10px] font-black uppercase tracking-[0.2em] text-neo-ink/55 sm:text-xs">
-            <Link href="/pixsqueeze" className="min-h-11 px-1 underline decoration-[3px] underline-offset-4 hover:text-neo-ink touch-manipulation sm:min-h-0">
+          <p className={lp.footerMeta}>{"Sif's Utilities"} · Next.js</p>
+          <div className={lp.footerLinks}>
+            <Link href="/pixsqueeze" className={lp.footerLink}>
               PixSqueeze
             </Link>
-            <span className="text-neo-ink/30" aria-hidden>
+            <span className={lp.footerSep} aria-hidden>
               ·
             </span>
-            <Link href="/vidsqueeze" className="min-h-11 px-1 underline decoration-[3px] underline-offset-4 hover:text-neo-ink touch-manipulation sm:min-h-0">
+            <Link href="/vidsqueeze" className={lp.footerLink}>
               VidSqueeze
             </Link>
-            <span className="text-neo-ink/30" aria-hidden>
+            <span className={lp.footerSep} aria-hidden>
               ·
             </span>
-            <Link href="/sif/utils" className="min-h-11 px-1 underline decoration-[3px] underline-offset-4 hover:text-neo-ink touch-manipulation sm:min-h-0">
+            <Link href="/sif/utils" className={lp.footerLink}>
               All tools
             </Link>
           </div>

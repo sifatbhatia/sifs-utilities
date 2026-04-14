@@ -10,8 +10,13 @@ import PremiumBackground from '@/components/PremiumBackground';
 import { useCircle } from '@/app/circle-crop/CircleContext';
 
 import PremiumSlider from './PremiumSlider';
+import clsx from 'clsx';
+import { useTheme } from '@/components/theme/ThemeProvider';
+import { workspaceChrome } from '@/lib/marketingChrome';
 
 export default function CircleCropWorkspace() {
+    const { theme } = useTheme();
+    const w = workspaceChrome(theme);
     const {
         originalImage,
         setOriginalImage,
@@ -144,7 +149,7 @@ export default function CircleCropWorkspace() {
                             </div>
 
                             {/* Compact Floating Controls - Liquid Glass */}
-                            <div className="neo-dock max-w-[840px] p-3 sm:p-5 flex flex-col sm:flex-row items-center gap-4 sm:gap-10">
+                            <div className="neo-dock max-w-[840px] p-3 sm:p-5 flex flex-col sm:flex-row items-center gap-4 sm:gap-10 backdrop-blur-xl shadow-[0px_18px_36px_0px_rgba(0,0,0,0.16),0px_2px_8px_0px_rgba(0,0,0,0.08),inset_0px_1px_0px_0px_rgba(255,255,255,0.36)]">
 
                                 {/* Sliders Group */}
                                 <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -157,8 +162,8 @@ export default function CircleCropWorkspace() {
                                         unit="x"
                                         icon={<ZoomIn className="w-3" />}
                                         onChange={(v) => setZoom(v)}
-                                        labelColor="text-zinc-500"
-                                        valueColor="text-zinc-800"
+                                        labelColor={theme === "neo-brutal" ? "text-neo-ink/50" : "text-zinc-400"}
+                                        valueColor={theme === "neo-brutal" ? "text-neo-ink" : "text-zinc-800"}
                                     />
                                     <PremiumSlider
                                         label="Rotate"
@@ -168,8 +173,8 @@ export default function CircleCropWorkspace() {
                                         unit="°"
                                         icon={<RotateCcw className="w-3" />}
                                         onChange={(v) => setRotation(v)}
-                                        labelColor="text-zinc-500"
-                                        valueColor="text-zinc-800"
+                                        labelColor={theme === "neo-brutal" ? "text-neo-ink/50" : "text-zinc-400"}
+                                        valueColor={theme === "neo-brutal" ? "text-neo-ink" : "text-zinc-800"}
                                     />
                                     <PremiumSlider
                                         label="Border"
@@ -179,8 +184,8 @@ export default function CircleCropWorkspace() {
                                         unit="px"
                                         icon={<Circle className="w-3" />}
                                         onChange={(v) => setBorderWidth(v)}
-                                        labelColor="text-zinc-500"
-                                        valueColor="text-zinc-800"
+                                        labelColor={theme === "neo-brutal" ? "text-neo-ink/50" : "text-zinc-400"}
+                                        valueColor={theme === "neo-brutal" ? "text-neo-ink" : "text-zinc-800"}
                                     />
                                 </div>
 
@@ -204,7 +209,7 @@ export default function CircleCropWorkspace() {
                                         whileTap={{ scale: 0.98 }}
                                         onClick={handleDownload}
                                         disabled={isProcessing}
-                                        className="flex-1 sm:flex-none bg-zinc-700 text-white px-8 py-3.5 rounded-[20px] font-bold text-[11px] sm:text-xs uppercase tracking-tight flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all shadow-xl border border-white/10 disabled:opacity-30"
+                                        className={clsx(w.runPrimary, "flex-1 sm:flex-none px-8 py-3.5 rounded-[20px] text-[11px] sm:text-xs")}
                                     >
                                         <Download className="w-3.5 h-3.5" /> Download
                                     </motion.button>

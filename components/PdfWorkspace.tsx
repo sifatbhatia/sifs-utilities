@@ -9,8 +9,12 @@ import { usePdf } from '@/app/pdf-compressor/PdfContext';
 import clsx from 'clsx';
 import { formatBytes } from '@/lib/compression';
 import PremiumSlider from './PremiumSlider';
+import { useTheme } from '@/components/theme/ThemeProvider';
+import { workspaceChrome } from '@/lib/marketingChrome';
 
 export default function PdfWorkspace() {
+    const { theme } = useTheme();
+    const w = workspaceChrome(theme);
     const {
         file,
         setFile,
@@ -26,8 +30,11 @@ export default function PdfWorkspace() {
     } = usePdf();
 
     const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
+    const [compressedPdfUrl, setCompressedPdfUrl] = React.useState<string | null>(null);
     const [showSidebar, setShowSidebar] = useState(false);
     const [showPageExtractor, setShowPageExtractor] = useState(false);
+    const [lastPreviewQuality, setLastPreviewQuality] = useState<number | null>(null);
+    const handleCompressRef = React.useRef(handleCompress);
 
     // Create object URL for PDF preview
     React.useEffect(() => {
@@ -39,6 +46,37 @@ export default function PdfWorkspace() {
             setPdfUrl(null);
         }
     }, [file]);
+
+    React.useEffect(() => {
+        if (compressedBlob) {
+            const url = URL.createObjectURL(compressedBlob);
+            setCompressedPdfUrl(url);
+            setLastPreviewQuality(quality);
+            return () => URL.revokeObjectURL(url);
+        } else {
+            setCompressedPdfUrl(null);
+        }
+    }, [compressedBlob, quality]);
+
+    React.useEffect(() => {
+        handleCompressRef.current = handleCompress;
+    }, [handleCompress]);
+
+    React.useEffect(() => {
+        if (!file || isProcessing) return;
+        // Avoid auto-running on initial load; only refresh an existing preview.
+        if (lastPreviewQuality === null) return;
+        if (lastPreviewQuality === quality) return;
+
+        const timer = window.setTimeout(() => {
+            void handleCompressRef.current();
+        }, 320);
+
+        return () => window.clearTimeout(timer);
+    }, [file, isProcessing, lastPreviewQuality, quality]);
+
+    const activePreviewUrl = compressedPdfUrl || pdfUrl;
+    const downloadUrl = compressedPdfUrl;
 
     return (
         <div className="w-full h-full flex flex-col flex-1 min-h-0 relative">
@@ -72,9 +110,9 @@ export default function PdfWorkspace() {
                             <div className="neo-shell-outer">
                                 <div className="neo-shell-inner neo-shell-inner--white w-full h-full overflow-hidden relative flex-1">
                                     {/* Full-size PDF embed */}
-                                    {pdfUrl ? (
+                                    {activePreviewUrl ? (
                                         <embed
-                                            src={`${pdfUrl}#toolbar=0&navpanes=0`}
+                                            src={`${activePreviewUrl}#toolbar=0&navpanes=0`}
                                             type="application/pdf"
                                             className="w-full h-full"
                                         />
@@ -86,9 +124,20 @@ export default function PdfWorkspace() {
                                     )}
 
                                     {/* PDF badge */}
-                                    <div className="absolute top-4 left-4 z-10 border-[3px] border-neo-ink bg-neo-magenta px-3 py-1.5 text-[9px] font-black uppercase tracking-wider text-white shadow-[3px_3px_0_0_#0a0a0a]">
+                                    <div className={w.floatingBadge}>
                                         PDF
                                     </div>
+
+                                    {compressedBlob && (
+                                        <div className="absolute top-4 left-4 z-10 bg-emerald-500/10 text-emerald-600 px-3 py-1.5 rounded-full border border-emerald-500/20">
+                                            <span className="text-[9px] font-bold uppercase tracking-tight">Compressed Preview</span>
+                                        </div>
+                                    )}
+                                    {!isProcessing && file && lastPreviewQuality !== null && lastPreviewQuality !== quality && (
+                                        <div className="absolute top-14 left-4 z-10 bg-zinc-900/75 text-white px-2.5 py-1 rounded-full border border-white/20">
+                                            <span className="text-[8px] font-bold uppercase tracking-tight">Updating Preview...</span>
+                                        </div>
+                                    )}
 
                                     {/* Close button */}
                                     <motion.button
@@ -123,7 +172,7 @@ export default function PdfWorkspace() {
                                     )}
 
                                     {/* Floating Controls — above preview on mobile */}
-                                    <div className="neo-dock max-w-[600px] p-3 sm:p-4 lg:hidden">
+                                    <div className="neo-dock max-w-[600px] p-3 sm:p-4 lg:hidden backdrop-blur-xl shadow-[0px_18px_36px_0px_rgba(0,0,0,0.16),0px_2px_8px_0px_rgba(0,0,0,0.08),inset_0px_1px_0px_0px_rgba(255,255,255,0.36)]">
                                         <div className="flex flex-col gap-3">
                                             {/* File info + density */}
                                             <div className="flex items-center justify-between gap-3">
@@ -148,7 +197,7 @@ export default function PdfWorkspace() {
                                                     whileTap={{ scale: 0.98 }}
                                                     onClick={handleCompress}
                                                     disabled={isProcessing}
-                                                    className="w-full bg-zinc-700 text-white px-6 py-2.5 rounded-[16px] font-bold text-[10px] uppercase tracking-tight flex items-center justify-center gap-2 hover:bg-zinc-800 transition-all shadow-xl border border-white/10 disabled:opacity-30"
+                                                    className="w-full bg-zinc-700 text-white px-6 py-2.5 rounded-[16px] font-bold text-[10px] uppercase tracking-tight flex items-center justify-center gap-2 hover:bg-zinc-800 transition-all shadow-[0px_16px_34px_0px_rgba(0,0,0,0.25),0px_2px_8px_0px_rgba(0,0,0,0.14),inset_0px_1px_0px_0px_rgba(255,255,255,0.22)] hover:shadow-[0px_20px_40px_0px_rgba(0,0,0,0.3),0px_2px_10px_0px_rgba(0,0,0,0.16),inset_0px_1px_0px_0px_rgba(255,255,255,0.28)] border border-white/10 disabled:opacity-30"
                                                 >
                                                     <FileType className="w-3.5 h-3.5" /> Compress
                                                 </motion.button>
@@ -156,9 +205,9 @@ export default function PdfWorkspace() {
                                                 <motion.a
                                                     whileHover={{ scale: 1.02 }}
                                                     whileTap={{ scale: 0.98 }}
-                                                    href={URL.createObjectURL(compressedBlob)}
+                                                    href={downloadUrl || undefined}
                                                     download={`compressed_${file.name}`}
-                                                    className="w-full bg-zinc-700 text-white px-6 py-2.5 rounded-[16px] font-bold text-[10px] uppercase tracking-tight flex items-center justify-center gap-2 hover:bg-zinc-800 transition-all shadow-xl border border-white/10"
+                                                    className="w-full bg-zinc-700 text-white px-6 py-2.5 rounded-[16px] font-bold text-[10px] uppercase tracking-tight flex items-center justify-center gap-2 hover:bg-zinc-800 transition-all shadow-[0px_16px_34px_0px_rgba(0,0,0,0.25),0px_2px_8px_0px_rgba(0,0,0,0.14),inset_0px_1px_0px_0px_rgba(255,255,255,0.22)] hover:shadow-[0px_20px_40px_0px_rgba(0,0,0,0.3),0px_2px_10px_0px_rgba(0,0,0,0.16),inset_0px_1px_0px_0px_rgba(255,255,255,0.28)] border border-white/10"
                                                 >
                                                     <Download className="w-3.5 h-3.5" /> Download
                                                 </motion.a>
@@ -233,7 +282,7 @@ export default function PdfWorkspace() {
                                         labelTransform={(v) => `${Math.round(v * 100)}%`}
                                         icon={<Settings2 className="w-3" />}
                                         onChange={(v) => setQuality(v)}
-                                        labelColor="text-zinc-500"
+                                        labelColor="text-zinc-400"
                                         valueColor="text-zinc-800"
                                     />
                                     <div className="flex items-center justify-between text-[8px] font-bold text-zinc-300 uppercase tracking-tight px-0.5">
@@ -320,7 +369,7 @@ export default function PdfWorkspace() {
                                         whileTap={{ scale: 0.98 }}
                                         onClick={handleCompress}
                                         disabled={isProcessing}
-                                        className="w-full bg-zinc-700 text-white px-8 py-4 rounded-[20px] font-bold text-[11px] uppercase tracking-tight flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all shadow-xl border border-white/10 disabled:opacity-30"
+                                        className="w-full bg-zinc-700 text-white px-8 py-4 rounded-[20px] font-bold text-[11px] uppercase tracking-tight flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all shadow-[0px_16px_34px_0px_rgba(0,0,0,0.25),0px_2px_8px_0px_rgba(0,0,0,0.14),inset_0px_1px_0px_0px_rgba(255,255,255,0.22)] hover:shadow-[0px_20px_40px_0px_rgba(0,0,0,0.3),0px_2px_10px_0px_rgba(0,0,0,0.16),inset_0px_1px_0px_0px_rgba(255,255,255,0.28)] border border-white/10 disabled:opacity-30"
                                     >
                                         {isProcessing ? (
                                             <><Loader2 className="w-4 h-4 animate-spin" /> Compressing</>
@@ -332,9 +381,9 @@ export default function PdfWorkspace() {
                                     <motion.a
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
-                                        href={URL.createObjectURL(compressedBlob)}
+                                        href={downloadUrl || undefined}
                                         download={`compressed_${file.name}`}
-                                        className="w-full bg-zinc-700 text-white px-8 py-4 rounded-[20px] font-bold text-[11px] uppercase tracking-tight flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all shadow-xl border border-white/10"
+                                        className="w-full bg-zinc-700 text-white px-8 py-4 rounded-[20px] font-bold text-[11px] uppercase tracking-tight flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all shadow-[0px_16px_34px_0px_rgba(0,0,0,0.25),0px_2px_8px_0px_rgba(0,0,0,0.14),inset_0px_1px_0px_0px_rgba(255,255,255,0.22)] hover:shadow-[0px_20px_40px_0px_rgba(0,0,0,0.3),0px_2px_10px_0px_rgba(0,0,0,0.16),inset_0px_1px_0px_0px_rgba(255,255,255,0.28)] border border-white/10"
                                     >
                                         <Download className="w-4 h-4" /> Download PDF
                                     </motion.a>

@@ -15,6 +15,8 @@ import DropZone from "./DropZone";
 import PremiumBackground from "@/components/PremiumBackground";
 import clsx from "clsx";
 import { mitigateSynthidLike } from "@/lib/synthidMitigation";
+import { useTheme } from "@/components/theme/ThemeProvider";
+import { workspaceChrome } from "@/lib/marketingChrome";
 
 type Mode = "meta" | "spectral";
 
@@ -61,6 +63,9 @@ function imageDataToPngBlob(data: ImageData): Promise<Blob | null> {
 }
 
 export default function SynthStripWorkspace() {
+  const { theme } = useTheme();
+  const w = workspaceChrome(theme);
+
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [outBlob, setOutBlob] = useState<Blob | null>(null);
@@ -164,31 +169,60 @@ export default function SynthStripWorkspace() {
                   setOutBlob(null);
                   setError(null);
                 }}
-                className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-neo-ink/45 hover:text-neo-ink touch-manipulation"
+                className={clsx(
+                  "inline-flex items-center gap-2 text-xs uppercase tracking-widest touch-manipulation",
+                  theme === "classic"
+                    ? "font-medium text-neutral-500 hover:text-neutral-800"
+                    : theme === "liquid-glass"
+                      ? "font-medium text-neutral-500 hover:text-neutral-900"
+                      : "font-black text-neo-ink/45 hover:text-neo-ink",
+                )}
               >
                 <X className="w-4 h-4" />
                 Clear
               </button>
             </div>
 
-            <div
-              className={clsx(
-                "space-y-3 rounded-xl border-[3px] border-neo-ink p-4 shadow-[5px_5px_0_0_#0a0a0a] sm:p-5",
-                showInfo ? "bg-neo-yellow" : "bg-white",
-              )}
-            >
+            <div className={w.infoPanel}>
               <button
                 type="button"
                 onClick={() => setShowInfo((s) => !s)}
                 className="flex items-center gap-2 w-full text-left touch-manipulation"
               >
-                <Info className="w-4 h-4 text-amber-800 shrink-0" />
-                <span className="text-sm font-bold text-amber-950">
+                <Info
+                  className={clsx(
+                    "w-4 h-4 shrink-0",
+                    theme === "classic"
+                      ? "text-neutral-700"
+                      : theme === "liquid-glass"
+                        ? "text-neutral-700"
+                        : "text-neo-ink",
+                  )}
+                />
+                <span
+                  className={clsx(
+                    "text-sm font-bold",
+                    theme === "classic"
+                      ? "text-neutral-900"
+                      : theme === "liquid-glass"
+                        ? "text-neutral-900"
+                        : "text-neo-ink",
+                  )}
+                >
                   Ethics &amp; limits (read this)
                 </span>
               </button>
               {showInfo && (
-                <div className="text-xs sm:text-sm text-amber-950/90 leading-relaxed space-y-2">
+                <div
+                  className={clsx(
+                    "text-xs sm:text-sm leading-relaxed space-y-2",
+                    theme === "classic"
+                      ? "text-neutral-700"
+                      : theme === "liquid-glass"
+                        ? "text-neutral-700"
+                        : "text-neo-ink/80",
+                  )}
+                >
                   <p>
                     <strong>SynthID</strong> is an invisible pixel watermark Google describes for
                     AI-generated images (e.g. Gemini / &ldquo;Nano Banana&rdquo; style tools).{" "}
@@ -234,16 +268,14 @@ export default function SynthStripWorkspace() {
               )}
             </div>
 
-            <div className="relative z-10 space-y-5 rounded-xl border-[3px] border-neo-ink bg-white p-4 shadow-[6px_6px_0_0_#0a0a0a] sm:p-6">
+            <div className={w.mainPanel}>
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   type="button"
                   onClick={() => setMode("meta")}
                   className={clsx(
-                    "flex-1 rounded-lg border-[3px] border-neo-ink px-4 py-3 text-left transition-all touch-manipulation",
-                    mode === "meta"
-                      ? "bg-neo-ink text-white shadow-[3px_3px_0_0_#62f5cd]"
-                      : "bg-white shadow-[3px_3px_0_0_#0a0a0a] hover:bg-neo-bg",
+                    w.modeBtn,
+                    mode === "meta" ? w.modeOn : w.modeOff,
                   )}
                 >
                   <div className="text-xs font-bold uppercase tracking-tight mb-1">
@@ -258,10 +290,8 @@ export default function SynthStripWorkspace() {
                   type="button"
                   onClick={() => setMode("spectral")}
                   className={clsx(
-                    "flex-1 rounded-lg border-[3px] border-neo-ink px-4 py-3 text-left transition-all touch-manipulation",
-                    mode === "spectral"
-                      ? "bg-neo-ink text-white shadow-[3px_3px_0_0_#ffe94a]"
-                      : "bg-white shadow-[3px_3px_0_0_#0a0a0a] hover:bg-neo-bg",
+                    w.modeBtn,
+                    mode === "spectral" ? w.modeOnAlt : w.modeOff,
                   )}
                 >
                   <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-tight mb-1">
@@ -287,7 +317,14 @@ export default function SynthStripWorkspace() {
                     max={85}
                     value={strength}
                     onChange={(e) => setStrength(Number(e.target.value))}
-                    className="h-3 w-full cursor-pointer touch-manipulation accent-neo-ink"
+                    className={clsx(
+                      "h-3 w-full cursor-pointer touch-manipulation",
+                      theme === "classic"
+                        ? "accent-neutral-700"
+                        : theme === "liquid-glass"
+                          ? "accent-neutral-800"
+                          : "accent-neo-ink",
+                    )}
                   />
                   <p className="text-[10px] text-zinc-500 leading-relaxed">
                     Lower = closer to original pixels. Raising increases softening at a handful of
@@ -297,9 +334,7 @@ export default function SynthStripWorkspace() {
               )}
 
               {error && (
-                <p className="rounded-lg border-[3px] border-neo-ink bg-neo-magenta px-3 py-2 text-sm font-bold text-white shadow-[3px_3px_0_0_#0a0a0a]">
-                  {error}
-                </p>
+                <p className={w.errorBanner}>{error}</p>
               )}
               {lastProfile && !error && outBlob && (
                 <p className="text-[11px] text-zinc-600">{lastProfile}</p>
@@ -310,7 +345,7 @@ export default function SynthStripWorkspace() {
                   type="button"
                   disabled={busy || !file}
                   onClick={run}
-                  className="flex min-h-12 flex-1 items-center justify-center gap-2 border-[3px] border-neo-ink bg-neo-ink text-sm font-black uppercase tracking-tight text-white shadow-[4px_4px_0_0_#62f5cd] hover:translate-x-0.5 hover:translate-y-0.5 disabled:opacity-40 touch-manipulation"
+                  className={w.runPrimary}
                 >
                   {busy ? <Loader2 className="w-5 h-5 animate-spin" /> : <Fingerprint className="w-5 h-5" />}
                   {busy ? "Processing…" : "Process image"}
@@ -319,7 +354,7 @@ export default function SynthStripWorkspace() {
                   type="button"
                   disabled={!outBlob}
                   onClick={download}
-                  className="flex min-h-12 flex-1 items-center justify-center gap-2 border-[3px] border-neo-ink bg-white text-sm font-black uppercase tracking-tight text-neo-ink shadow-[4px_4px_0_0_#0a0a0a] hover:bg-neo-bg disabled:opacity-40 touch-manipulation"
+                  className={w.runSecondary}
                 >
                   <Download className="w-5 h-5" />
                   Download PNG
@@ -330,18 +365,23 @@ export default function SynthStripWorkspace() {
                 href="https://deepmind.google/technologies/synthid/"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-neo-ink/70 underline-offset-4 hover:text-neo-ink"
+                className={clsx(
+                  "inline-flex items-center gap-1.5 text-xs font-bold underline-offset-4",
+                  theme === "classic"
+                    ? "text-neutral-600 hover:text-neutral-900"
+                    : theme === "liquid-glass"
+                      ? "text-neutral-600 hover:text-neutral-900"
+                      : "text-neo-ink/70 hover:text-neo-ink",
+                )}
               >
                 Official SynthID page <ExternalLink className="w-3 h-3" />
               </a>
             </div>
 
             <div className="grid min-h-0 grid-cols-1 gap-4 lg:grid-cols-2">
-              <div className="flex min-h-[180px] flex-col overflow-hidden rounded-xl border-[3px] border-neo-ink bg-white p-3 shadow-[5px_5px_0_0_#0a0a0a] sm:p-4">
-                <span className="mb-2 shrink-0 text-[10px] font-black uppercase tracking-widest text-neo-ink/50">
-                  Original
-                </span>
-                <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-lg border-2 border-neo-ink bg-neo-bg">
+              <div className={w.previewCard}>
+                <span className={w.previewLabel}>Original</span>
+                <div className={w.previewFrame}>
                   {previewUrl && (
                     // eslint-disable-next-line @next/next/no-img-element -- blob preview
                     <img
@@ -352,11 +392,9 @@ export default function SynthStripWorkspace() {
                   )}
                 </div>
               </div>
-              <div className="flex min-h-[180px] flex-col overflow-hidden rounded-xl border-[3px] border-neo-ink bg-white p-3 shadow-[5px_5px_0_0_#0a0a0a] sm:p-4">
-                <span className="mb-2 shrink-0 text-[10px] font-black uppercase tracking-widest text-neo-ink/50">
-                  Output (PNG)
-                </span>
-                <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-lg border-2 border-neo-ink bg-neo-bg">
+              <div className={w.previewCard}>
+                <span className={w.previewLabel}>Output (PNG)</span>
+                <div className={w.previewFrame}>
                   {outUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -365,7 +403,16 @@ export default function SynthStripWorkspace() {
                       className="max-w-full max-h-[min(40vh,360px)] w-auto h-auto object-contain"
                     />
                   ) : (
-                    <div className="px-4 text-center text-sm font-semibold text-neo-ink/45">
+                    <div
+                      className={clsx(
+                        "px-4 text-center text-sm font-semibold",
+                        theme === "classic"
+                          ? "text-neutral-500"
+                          : theme === "liquid-glass"
+                            ? "text-neutral-500"
+                            : "text-neo-ink/45",
+                      )}
+                    >
                       Run process to preview
                     </div>
                   )}
