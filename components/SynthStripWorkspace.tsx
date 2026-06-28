@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Download,
@@ -77,7 +77,7 @@ export default function SynthStripWorkspace() {
   const [lastProfile, setLastProfile] = useState<string | null>(null);
   const [showInfo, setShowInfo] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!file || !file.type.startsWith("image/")) {
       setPreviewUrl(null);
       return;
@@ -87,7 +87,7 @@ export default function SynthStripWorkspace() {
     return () => URL.revokeObjectURL(u);
   }, [file]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!outBlob) {
       setOutUrl(null);
       return;

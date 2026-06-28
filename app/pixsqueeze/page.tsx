@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 
 export default function PixSqueezePage() {
     return (
-        <main className="min-h-dvh h-[100dvh] bg-background p-safe-page relative overflow-hidden flex flex-col">
+        <main className="min-h-dvh bg-background p-safe-page relative overflow-x-hidden flex flex-col md:h-[100dvh] md:overflow-hidden">
             <div className="max-w-[1760px] mx-auto w-full h-full flex flex-col">
                 <div className="shrink-0 mb-1 sm:mb-2">
                     <Link

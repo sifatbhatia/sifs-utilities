@@ -18,6 +18,8 @@ Built with **Next.js 16** (App Router), **React 19**, **TypeScript**, and **Tail
 | **SynthClean** | `/synth-strip` | Re-export images without EXIF; optional conservative FFT softening at publicly reported SynthID-style carrier bands (Gemini / "Nano Banana" class exports — see in-app disclaimer) |
 | **GrainPix** | `/grain-pix` | Film-style grain on images |
 | **IconSet** | `/icon-set` | Generate app icons and favicons |
+| **JSON Formatter** | `/json-formatter` | Format, compact, validate, copy, and download JSON locally |
+| **YAML Formatter** | `/yaml-formatter` | Format, compact, validate, copy, and download YAML locally |
 
 The **marketing landing** lives at **`/`**; the classic tool grid is at **`/sif/utils`**.
 
@@ -66,6 +68,22 @@ The UI is tuned for phones and notched devices:
 - **SynthClean** is for legitimate workflows (your own exports, research). It does **not** guarantee removal of Google SynthID or any detector signal. The optional spectral step follows **public** carrier-frequency reports and is capped to reduce visible degradation; see [DeepMind on SynthID](https://deepmind.google/discover/blog/identifying-ai-generated-images-with-synthid/) and the academic discussion in [arXiv:2510.09263](https://arxiv.org/abs/2510.09263).
 - **VidSqueeze** loads FFmpeg core assets from a **CDN** (`unpkg`) when you run compression — see `app/vidsqueeze/VidContext.tsx` if you need to self-host.
 - **COOP / COEP** headers are set in `next.config.ts` for SharedArrayBuffer compatibility with FFmpeg.wasm; third-party embeds may need alignment with those headers.
+
+---
+
+## Utility improvement backlog
+
+| Priority | Area | Improvement |
+|----------|------|-------------|
+| P0 | Build | Investigate why `next build` can stall at `Creating an optimized production build ...` in this workspace. |
+| P1 | Previews | Keep blob preview/download URLs on explicit create/revoke lifecycles. |
+| P1 | Errors | Surface workspace-level processing errors inside each tool, not only in the console. |
+| P2 | PixSqueeze | Add a per-file before/after size table and keep active-file selection stable during batch updates. |
+| P2 | VidSqueeze | Show FFmpeg load/progress states and clearer CRF/output-size guidance. |
+| P2 | PDFPress | Polish page extraction and preview refresh states. |
+| P2 | MetaShield | Show supported file types and exact metadata fields removed before processing. |
+| P3 | IconSet | Export a PWA/apple-touch-icon manifest snippet with generated assets. |
+| P3 | GrainPix | Add seeded grain for repeatable exports. |
 
 ---
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, ShieldCheck, X, FileText, CheckCircle, FileType, File, Loader2, Image as ImageIcon, List } from 'lucide-react';
 import { formatBytes } from '@/lib/compression';
@@ -11,6 +11,25 @@ import { PDFDocument } from 'pdf-lib';
 import JSZip from 'jszip';
 import { useTheme } from '@/components/theme/ThemeProvider';
 import { workspaceChrome } from '@/lib/marketingChrome';
+import { downloadBlob } from '@/lib/download';
+
+function scrubXmlElements(xml: string, fields: string[]) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xml, 'application/xml');
+
+    if (doc.getElementsByTagName('parsererror').length > 0) {
+        throw new Error('Unable to parse document metadata XML');
+    }
+
+    const fieldSet = new Set(fields);
+    Array.from(doc.getElementsByTagName('*')).forEach((node) => {
+        if (fieldSet.has(node.localName)) {
+            node.textContent = '';
+        }
+    });
+
+    return new XMLSerializer().serializeToString(doc);
+}
 
 export default function MetaShieldWorkspace() {
     const { theme } = useTheme();
@@ -25,9 +44,9 @@ export default function MetaShieldWorkspace() {
 
     const addLog = (msg: string) => setLog(prev => [...prev, msg]);
 
-    // Create preview URL for images
-    React.useEffect(() => {
-        if (file && file.type.startsWith('image/')) {
+    // Create preview URL for browser-renderable files
+    useEffect(() => {
+        if (file && (file.type.startsWith('image/') || file.type === 'application/pdf')) {
             const url = URL.createObjectURL(file);
             setPreviewUrl(url);
             return () => URL.revokeObjectURL(url);
@@ -66,19 +85,21 @@ export default function MetaShieldWorkspace() {
 
         if (coreXml) {
             addLog("Scrubbing core properties...");
-            let content = await coreXml.async("string");
-            content = content.replace(/<dc:creator>.*?<\/dc:creator>/g, "<dc:creator></dc:creator>");
-            content = content.replace(/<cp:lastModifiedBy>.*?<\/cp:lastModifiedBy>/g, "<cp:lastModifiedBy></cp:lastModifiedBy>");
-            content = content.replace(/<dc:title>.*?<\/dc:title>/g, "<dc:title></dc:title>");
-            content = content.replace(/<dc:description>.*?<\/dc:description>/g, "<dc:description></dc:description>");
+            const content = scrubXmlElements(await coreXml.async("string"), [
+                "creator",
+                "lastModifiedBy",
+                "title",
+                "description",
+            ]);
             zip.file("docProps/core.xml", content);
         }
 
         if (appXml) {
             addLog("Scrubbing app properties...");
-            let content = await appXml.async("string");
-            content = content.replace(/<Company>.*?<\/Company>/g, "<Company></Company>");
-            content = content.replace(/<Manager>.*?<\/Manager>/g, "<Manager></Manager>");
+            const content = scrubXmlElements(await appXml.async("string"), [
+                "Company",
+                "Manager",
+            ]);
             zip.file("docProps/app.xml", content);
         }
 
@@ -106,7 +127,10 @@ export default function MetaShieldWorkspace() {
                     else reject(new Error("Blob creation failed"));
                 }, file.type);
             };
-            img.onerror = () => reject(new Error("Image load failed"));
+            img.onerror = () => {
+                URL.revokeObjectURL(url);
+                reject(new Error("Image load failed"));
+            };
             img.src = url;
         });
     };
@@ -144,6 +168,11 @@ export default function MetaShieldWorkspace() {
         } finally {
             setIsProcessing(false);
         }
+    };
+
+    const downloadCleanedFile = () => {
+        if (!file || !cleanedBlob) return;
+        downloadBlob(cleanedBlob, `safe_${file.name.replace(/(\.[^\\.]+)$/, '_clean$1')}`);
     };
 
     const getFileTypeLabel = () => {
@@ -202,7 +231,7 @@ export default function MetaShieldWorkspace() {
                         key="workspace"
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="flex-1 flex flex-col lg:grid lg:grid-cols-[1fr_340px] gap-4 p-2 sm:p-4 md:p-6 min-h-0 h-full overflow-y-auto lg:overflow-hidden max-w-[1500px] mx-auto w-full relative"
+                        className="flex-1 flex flex-col lg:grid lg:grid-cols-[1fr_340px] gap-4 p-2 sm:p-4 md:p-6 min-h-0 md:h-full overflow-y-auto lg:overflow-hidden max-w-[1500px] mx-auto w-full relative"
                     >
                         {/* LEFT COLUMN: Preview */}
                         <div className="flex flex-col gap-4 min-h-[380px] lg:min-h-0 flex-1 relative">
@@ -212,17 +241,18 @@ export default function MetaShieldWorkspace() {
                                     {/* Image preview */}
                                     {file.type.startsWith('image/') && previewUrl ? (
                                         <div className="w-full h-full flex items-center justify-center p-6 sm:p-8">
+                                            {/* eslint-disable-next-line @next/next/no-img-element -- Blob object URLs cannot be optimized by next/image. */}
                                             <img
                                                 src={previewUrl}
                                                 alt="Preview"
                                                 className="max-w-full max-h-full object-contain pointer-events-none select-none shadow-2xl rounded-lg"
                                             />
                                         </div>
-                                    ) : file.type === 'application/pdf' ? (
+                                    ) : file.type === 'application/pdf' && previewUrl ? (
                                         /* PDF preview */
                                         <div className="w-full h-full bg-white rounded-[16px] sm:rounded-[24px] m-3 sm:m-4 overflow-hidden">
                                             <embed
-                                                src={`${URL.createObjectURL(file)}#toolbar=0&navpanes=0`}
+                                                src={`${previewUrl}#toolbar=0&navpanes=0`}
                                                 type="application/pdf"
                                                 className="w-full h-full"
                                             />
@@ -316,15 +346,15 @@ export default function MetaShieldWorkspace() {
                                                 <ShieldCheck className="w-3.5 h-3.5" /> Scrub
                                             </motion.button>
                                         ) : (
-                                            <motion.a
+                                            <motion.button
+                                                type="button"
                                                 whileHover={{ scale: 1.02 }}
                                                 whileTap={{ scale: 0.98 }}
-                                                href={cleanedBlob ? URL.createObjectURL(cleanedBlob) : '#'}
-                                                download={`safe_${file.name.replace(/(\.[^\\.]+)$/, '_clean$1')}`}
+                                                onClick={downloadCleanedFile}
                                                 className={clsx(w.runPrimary, "shrink-0 px-5 sm:px-7 py-2.5 sm:py-3 rounded-[16px] sm:rounded-[20px] text-[10px] sm:text-[11px]")}
                                             >
                                                 <Download className="w-3.5 h-3.5" /> Download
-                                            </motion.a>
+                                            </motion.button>
                                         )}
                                     </div>
                                 </div>
@@ -454,15 +484,15 @@ export default function MetaShieldWorkspace() {
                                         )}
                                     </motion.button>
                                 ) : (
-                                    <motion.a
+                                    <motion.button
+                                        type="button"
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
-                                        href={cleanedBlob ? URL.createObjectURL(cleanedBlob) : '#'}
-                                        download={`safe_${file.name.replace(/(\.[^\\.]+)$/, '_clean$1')}`}
+                                        onClick={downloadCleanedFile}
                                         className={clsx(w.runPrimary, "w-full px-8 py-4 rounded-[20px] text-[11px]")}
                                     >
                                         <Download className="w-4 h-4" /> Download Safe File
-                                    </motion.a>
+                                    </motion.button>
                                 )}
                                 <p className="text-[8px] font-bold text-zinc-400 uppercase tracking-tight text-center mt-3">
                                     100% client-side · No uploads

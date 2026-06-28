@@ -1,6 +1,5 @@
 "use client";
 
-import React from 'react';
 import { useGrain } from '../GrainContext';
 import BatchQueue from '@/components/BatchQueue';
 import { Download } from 'lucide-react';
@@ -9,12 +8,12 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export default function QueuePage() {
-    const { files, isBatchProcessing, handleRemoveFile, handleDownloadAll } = useGrain();
+    const { files, handleRemoveFile, handleDownloadAll } = useGrain();
 
     const totalFiles = files.length;
 
     return (
-        <main className="min-h-dvh h-[100dvh] bg-background p-safe-page relative overflow-hidden flex flex-col">
+        <main className="min-h-dvh bg-background p-safe-page relative overflow-x-hidden flex flex-col md:h-[100dvh] md:overflow-hidden">
             <PremiumBackground />
             <div className="max-w-[1760px] mx-auto w-full h-full flex flex-col z-10 relative">
                 <div className="shrink-0 mb-4 sm:mb-6">
@@ -39,7 +38,6 @@ export default function QueuePage() {
                         <BatchQueue
                             files={files}
                             onRemove={handleRemoveFile}
-                            isProcessing={isBatchProcessing}
                         />
                     </div>
 

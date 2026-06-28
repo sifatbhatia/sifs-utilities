@@ -4,13 +4,10 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { SITE_TOOLS } from "@/data/siteTools";
-import ThemeHint from "@/components/theme/ThemeHint";
-import ThemeSwitcher from "@/components/theme/ThemeSwitcher";
-import { useTheme } from "@/components/theme/ThemeProvider";
 import { hubChrome } from "@/lib/marketingChrome";
 
 export default function UtilsPage() {
-  const { theme } = useTheme();
+  const theme = "classic";
   const h = hubChrome(theme);
 
   return (
@@ -24,9 +21,7 @@ export default function UtilsPage() {
             >
               ← Landing
             </Link>
-            <ThemeSwitcher variant="toolbar" />
           </div>
-          <ThemeHint />
           <div className="space-y-1 sm:space-y-2">
             <motion.h1
               initial={{ opacity: 0, y: 10 }}

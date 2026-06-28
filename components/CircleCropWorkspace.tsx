@@ -102,7 +102,7 @@ export default function CircleCropWorkspace() {
                         key="workspace"
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="flex-1 flex flex-col p-2 sm:p-4 md:p-6 min-h-0 h-full overflow-hidden max-w-[1500px] mx-auto w-full"
+                        className="flex-1 flex flex-col p-2 sm:p-4 md:p-6 min-h-0 md:h-full md:overflow-hidden max-w-[1500px] mx-auto w-full"
                     >
                         {/* Cropper Container */}
                         <div className="neo-shell-outer">

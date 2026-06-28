@@ -1,14 +1,16 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
+import type { Dispatch, ReactNode, SetStateAction } from 'react';
 import { BatchFile } from '@/components/BatchQueue';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
 import JSZip from 'jszip';
+import { downloadBlob } from '@/lib/download';
 
 interface VidContextType {
     files: BatchFile[];
-    setFiles: React.Dispatch<React.SetStateAction<BatchFile[]>>;
+    setFiles: Dispatch<SetStateAction<BatchFile[]>>;
     isBatchProcessing: boolean;
     quality: number; // CRF
     setQuality: (q: number) => void;
@@ -20,8 +22,12 @@ interface VidContextType {
 }
 
 const VidContext = createContext<VidContextType | undefined>(undefined);
+const FFMPEG_CORE_URL =
+    process.env.NEXT_PUBLIC_FFMPEG_CORE_URL ??
+    'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
+const DEBUG_FFMPEG = process.env.NEXT_PUBLIC_FFMPEG_DEBUG === 'true';
 
-export function VidProvider({ children }: { children: React.ReactNode }) {
+export function VidProvider({ children }: { children: ReactNode }) {
     const [files, setFiles] = useState<BatchFile[]>([]);
     const [isBatchProcessing, setIsBatchProcessing] = useState(false);
     const [quality, setQuality] = useState(23); // Default CRF 23
@@ -32,15 +38,16 @@ export function VidProvider({ children }: { children: React.ReactNode }) {
     const loadFfmpeg = async () => {
         if (ffmpeg) return;
         const ffmpegInstance = new FFmpeg();
-        const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
 
-        ffmpegInstance.on('log', ({ message }) => {
-            console.log('FFmpeg:', message);
-        });
+        if (DEBUG_FFMPEG) {
+            ffmpegInstance.on('log', ({ message }) => {
+                console.debug('FFmpeg:', message);
+            });
+        }
 
         await ffmpegInstance.load({
-            coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
-            wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+            coreURL: await toBlobURL(`${FFMPEG_CORE_URL}/ffmpeg-core.js`, 'text/javascript'),
+            wasmURL: await toBlobURL(`${FFMPEG_CORE_URL}/ffmpeg-core.wasm`, 'application/wasm'),
         });
 
         setFfmpeg(ffmpegInstance);
@@ -131,20 +138,14 @@ export function VidProvider({ children }: { children: React.ReactNode }) {
 
         if (completed.length === 1) {
             const f = completed[0];
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(f.compressedBlob!);
-            link.download = `compressed_${f.file.name.split('.')[0]}.mp4`;
-            link.click();
+            downloadBlob(f.compressedBlob!, `compressed_${f.file.name.split('.')[0]}.mp4`);
         } else {
             const zip = new JSZip();
             completed.forEach(f => {
                 zip.file(`compressed_${f.file.name.split('.')[0]}.mp4`, f.compressedBlob!);
             });
             const content = await zip.generateAsync({ type: "blob" });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(content);
-            link.download = "videos.zip";
-            link.click();
+            downloadBlob(content, "videos.zip");
         }
     };
 

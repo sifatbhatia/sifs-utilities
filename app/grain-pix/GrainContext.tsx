@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { BatchFile } from '@/components/BatchQueue';
 import JSZip from 'jszip';
+import { downloadBlob } from '@/lib/download';
 
 interface GrainSettings {
     amount: number;
@@ -197,20 +198,14 @@ export function GrainProvider({ children }: { children: React.ReactNode }) {
 
         if (completed.length === 1) {
             const f = completed[0];
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(f.compressedBlob!);
-            link.download = `grained_${f.file.name}`;
-            link.click();
+            downloadBlob(f.compressedBlob!, `grained_${f.file.name}`);
         } else {
             const zip = new JSZip();
             completed.forEach(f => {
                 zip.file(`grained_${f.file.name}`, f.compressedBlob!);
             });
             const content = await zip.generateAsync({ type: "blob" });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(content);
-            link.download = "grained_images.zip";
-            link.click();
+            downloadBlob(content, "grained_images.zip");
         }
     };
 

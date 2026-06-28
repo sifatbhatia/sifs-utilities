@@ -1,14 +1,7 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useContext } from "react";
 import type { ThemeId } from "@/lib/theme";
-import { THEME_STORAGE_KEY, isThemeId } from "@/lib/theme";
 
 type Ctx = {
   theme: ThemeId;
@@ -16,30 +9,13 @@ type Ctx = {
 };
 
 const ThemeContext = createContext<Ctx | null>(null);
-
-function readThemeFromDom(): ThemeId {
-  if (typeof document === "undefined") return "classic";
-  const fromDom = document.documentElement.dataset.theme;
-  if (isThemeId(fromDom)) return fromDom;
-  return "classic";
-}
+const classicTheme: Ctx = {
+  theme: "classic",
+  setTheme: () => {},
+};
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeId>(() => readThemeFromDom());
-
-  const setTheme = useCallback((t: ThemeId) => {
-    setThemeState(t);
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, t);
-    } catch {
-      /* private mode */
-    }
-    document.documentElement.dataset.theme = t;
-  }, []);
-
-  const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
-
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  return <ThemeContext.Provider value={classicTheme}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme(): Ctx {

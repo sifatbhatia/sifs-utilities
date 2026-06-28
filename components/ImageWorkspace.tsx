@@ -1,16 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import DropZone from './DropZone';
 import { formatBytes } from '@/lib/compression';
-import dynamic from 'next/dynamic';
 import { Info, Loader2, X, List, Plus, Download, Settings2 } from 'lucide-react';
 import clsx from 'clsx';
 import PremiumBackground from '@/components/PremiumBackground';
 import BatchQueue from './BatchQueue';
 import { usePix } from '@/app/pixsqueeze/PixContext';
-import Link from 'next/link';
 import PremiumSlider from './PremiumSlider';
 import { useTheme } from '@/components/theme/ThemeProvider';
 import { workspaceChrome } from '@/lib/marketingChrome';
@@ -33,7 +31,7 @@ export default function ImageWorkspace() {
         handleFilesSelect
     } = usePix();
 
-    const [showQueue, setShowQueue] = React.useState(false);
+    const [showQueue, setShowQueue] = useState(false);
 
     // Single View State
     const [originalUrl, setOriginalUrl] = useState<string | null>(null);
@@ -88,7 +86,7 @@ export default function ImageWorkspace() {
                         key="workspace"
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="flex-1 flex flex-col lg:grid lg:grid-cols-[1fr_340px] gap-4 p-2 sm:p-4 md:p-6 min-h-0 h-full overflow-hidden max-w-[1500px] mx-auto w-full relative"
+                        className="flex-1 flex flex-col lg:grid lg:grid-cols-[1fr_340px] gap-4 p-2 sm:p-4 md:p-6 min-h-0 md:h-full md:overflow-hidden max-w-[1500px] mx-auto w-full relative"
                     >
                         {/* LEFT COLUMN: Preview + Controls */}
                         <div className="flex flex-col gap-4 min-h-0 flex-1 relative">
@@ -102,6 +100,7 @@ export default function ImageWorkspace() {
                             >
                                     {originalUrl ? (
                                         <>
+                                            {/* eslint-disable-next-line @next/next/no-img-element -- Blob object URLs cannot be optimized by next/image. */}
                                             <img
                                                 src={showOriginal ? originalUrl : (processedUrl || originalUrl)}
                                                 alt="Preview"
@@ -243,7 +242,6 @@ export default function ImageWorkspace() {
                                 <BatchQueue
                                     files={files}
                                     onRemove={(id) => setFiles(prev => prev.filter(f => f.id !== id))}
-                                    isProcessing={isBatchProcessing}
                                 />
                             </div>
                         </div>

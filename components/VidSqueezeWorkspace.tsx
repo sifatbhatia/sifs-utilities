@@ -79,7 +79,7 @@ export default function VidSqueezeWorkspace() {
                         key="workspace"
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="flex-1 flex flex-col lg:grid lg:grid-cols-[1fr_340px] gap-4 p-2 sm:p-4 md:p-6 min-h-0 h-full overflow-hidden max-w-[1500px] mx-auto w-full relative"
+                        className="flex-1 flex flex-col lg:grid lg:grid-cols-[1fr_340px] gap-4 p-2 sm:p-4 md:p-6 min-h-0 md:h-full md:overflow-hidden max-w-[1500px] mx-auto w-full relative"
                     >
                         {/* LEFT COLUMN: Preview + Controls */}
                         <div className="flex flex-col gap-4 min-h-0 flex-1 relative">
@@ -183,7 +183,6 @@ export default function VidSqueezeWorkspace() {
                                 <BatchQueue
                                     files={files}
                                     onRemove={(id) => setFiles(prev => prev.filter(f => f.id !== id))}
-                                    isProcessing={isBatchProcessing}
                                 />
                             </div>
                         </div>

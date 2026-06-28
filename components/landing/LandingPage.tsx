@@ -17,9 +17,6 @@ import {
 } from "lucide-react";
 import type { SiteTool } from "@/data/siteTools";
 import { SITE_TOOLS } from "@/data/siteTools";
-import ThemeHint from "@/components/theme/ThemeHint";
-import ThemeSwitcher from "@/components/theme/ThemeSwitcher";
-import { useTheme } from "@/components/theme/ThemeProvider";
 import { bentoTileChrome, landingChrome } from "@/lib/marketingChrome";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -44,39 +41,35 @@ const LANDING_TOOL_LIMIT = 3;
 
 const MARQUEE = [
   ...SITE_TOOLS.map((t) => t.name),
-  "Client-side",
-  "Private",
-  "No account",
+  "Runs in the browser",
+  "No sign-in",
   "No ads",
-  "Fast",
+  "Made for file chores",
 ];
 
-const PILLARS_NEO = [
+const PILLARS = [
   {
-    title: "Tired of those other sites?",
-    body: "So was I — half the utilities online feel abandoned, half bury you in ads and trackers, and plenty still load like it’s 2012. This suite is the opposite: quick to open, easy to read, and kept current.",
+    title: "Open the page, do the job",
+    body: "Each tool starts on the work surface. There are no account prompts, pricing tables, or filler screens to get past.",
     icon: Zap,
   },
   {
-    title: "Runs locally",
-    body: "Your files stay in the browser for these workflows — no upload queue on our side, nothing to wade through before you can start.",
+    title: "Your files stay close",
+    body: "Most jobs run in the browser. When a tool needs a local preview or export, it works with the file already on your device.",
     icon: Shield,
   },
   {
-    title: "One loud, honest UI",
-    body: "Thick black frames, flat color blocks, and hard offset shadows — the same visual rules from this page into every tool. Big tap targets, safe areas, no glassmorphism theater.",
+    title: "Plain controls",
+    body: "Large drop zones, readable labels, and direct download buttons make the tools easy to use on a phone or a desktop.",
     icon: Sparkles,
   },
 ] as const;
 
-const PILLARS_CLASSIC = [
-  PILLARS_NEO[0],
-  PILLARS_NEO[1],
-  {
-    title: "Calm, readable chrome",
-    body: "Soft contrast, comfortable type, and simple surfaces — the same understated layout from this page through the hub and into each workspace. No gimmicks, just tools that stay out of your way.",
-    icon: Sparkles,
-  },
+const TASKS = [
+  "Shrink a batch of images before sending them",
+  "Make a PDF smaller without hunting for settings",
+  "Crop a profile photo into a circle",
+  "Strip metadata before sharing a file",
 ] as const;
 
 function BentoTile({
@@ -145,10 +138,10 @@ function BentoTile({
 
 export default function LandingPage() {
   const root = useRef<HTMLElement>(null);
-  const { theme } = useTheme();
+  const theme = "classic";
   const lp = landingChrome(theme);
   const tile = bentoTileChrome(theme);
-  const pillars = lp.c ? PILLARS_CLASSIC : PILLARS_NEO;
+  const pillars = PILLARS;
 
   useGSAP(
     () => {
@@ -250,52 +243,77 @@ export default function LandingPage() {
               <span className={lp.brandWordmark}>{"Sif's Utilities"}</span>
             </Link>
             <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-3">
-              <ThemeSwitcher variant="toolbar" />
               <Link href="/sif/utils" className={lp.hubBtn}>
                 Hub
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden />
               </Link>
             </div>
           </div>
-          <ThemeHint className={lp.hintRule} />
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="relative z-10 flex min-h-[min(100dvh,56rem)] flex-col justify-center px-4 pb-14 pt-6 sm:px-6 sm:pb-20 sm:pt-10 md:px-10 md:pb-28 md:pt-14">
-        <div className="mx-auto max-w-[1600px]">
-            <p className={lp.heroKicker}>Browser-native suite</p>
+      <section className="relative z-10 px-4 pb-14 pt-10 sm:px-6 sm:pb-20 sm:pt-16 md:px-10 md:pb-28 md:pt-20">
+        <div className="mx-auto grid min-h-[min(88dvh,52rem)] max-w-[1600px] items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,32rem)]">
+          <div>
+            <p className={lp.heroKicker}>Local file tools</p>
 
-            <div className="max-w-[min(100%,52rem)] lg:max-w-[min(100%,64rem)]">
+            <div className="max-w-[min(100%,58rem)]">
               <h1 className={lp.h1}>
                 <span className="lp-hero-line block overflow-hidden pb-[0.06em]">
-                  <span className="lp-hero-line-inner block">Sif&apos;s</span>
+                  <span className="lp-hero-line-inner block">Useful tools</span>
                 </span>
                 <span className="lp-hero-line block overflow-hidden pb-[0.06em]">
-                  <span className="lp-hero-line-inner block">Utilities</span>
+                  <span className="lp-hero-line-inner block">for everyday files</span>
                 </span>
               </h1>
             </div>
 
             <p className={lp.heroLead}>
-              {lp.c
-                ? "Compress, transcode, crop, scrub metadata, tune exports — eight focused workspaces in one place, without the usual crawl through slow, ad-heavy, or half-forgotten utility sites."
-                : "Compress, transcode, crop, scrub metadata, tune exports — eight focused workspaces with one shared design language, without the usual crawl through slow, ad-heavy, or half-forgotten utility sites."}
+              Resize images, compress videos, clean PDFs, remove metadata, build icons, and format
+              JSON or YAML. Open a tool, drop a file, download the result.
             </p>
 
             <div className="lp-hero-cta mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center">
               <Link href="/sif/utils" className={lp.heroPrimaryCta}>
-                Open the hub
+                Open all tools
                 <ArrowRight className="h-5 w-5" aria-hidden />
               </Link>
               <a href="#suite" className={lp.heroGhostCta}>
-                Browse the suite
+                See common jobs
               </a>
             </div>
+          </div>
+
+          <aside className="lp-fade rounded-[1.75rem] border border-neutral-400/25 bg-white/70 p-4 shadow-xl shadow-neutral-700/10 backdrop-blur-md sm:p-5">
+            <div className="rounded-[1.25rem] bg-[#575757] p-5 text-white sm:p-6">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/55">
+                Start here
+              </p>
+              <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
+                Pick the chore, not the product category.
+              </h2>
+              <ul className="mt-6 space-y-3">
+                {TASKS.map((task) => (
+                  <li key={task} className="flex gap-3 text-sm leading-6 text-white/80">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-white/70" />
+                    <span>{task}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/sif/utils"
+                className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-[#575757] transition hover:bg-neutral-100"
+              >
+                Go to the tool list
+                <ArrowRight className="h-4 w-4" aria-hidden />
+              </Link>
+            </div>
+          </aside>
 
           {/* Mobile: horizontal snap picks */}
           <div
-            className="lp-scroll-hint lp-fade mt-10 flex gap-3 overflow-x-auto pb-3 pl-1 sm:mt-12 md:hidden"
+            className="lp-scroll-hint lp-fade flex gap-3 overflow-x-auto pb-3 pl-1 md:hidden lg:col-span-2"
             aria-label="Featured tools"
           >
             {SITE_TOOLS.slice(0, LANDING_TOOL_LIMIT).map((t) => {
@@ -348,15 +366,15 @@ export default function LandingPage() {
       >
         <div className="mx-auto max-w-[1600px]">
           <div className="mb-10 max-w-2xl sm:mb-14 md:mb-16">
-            <p className={lp.suiteKicker}>The suite</p>
+            <p className={lp.suiteKicker}>Common jobs</p>
             <h2 className={lp.suiteH2}>
-              Featured tools.
+              Start with the file
               <br />
-              Built to match.
+              in front of you.
             </h2>
             <p className={lp.suiteLead}>
-              A quick preview from the suite. Open any card now, or jump to the full hub to browse
-              everything.
+              The most-used tools are here. The full list includes image, video, PDF, metadata,
+              icon, JSON, and YAML utilities.
             </p>
           </div>
 
@@ -373,7 +391,7 @@ export default function LandingPage() {
           </div>
           <div className="mt-6 flex justify-center sm:mt-8">
             <Link href="/sif/utils" className={lp.heroPrimaryCta}>
-              View all tools
+              View the full list
               <LayoutGrid className="h-5 w-5" aria-hidden />
             </Link>
           </div>
@@ -404,14 +422,13 @@ export default function LandingPage() {
       {/* CTA */}
       <section className="relative z-10 px-4 py-16 sm:px-6 sm:py-20 md:px-10 md:py-24">
         <div className={lp.ctaBox}>
-          <h2 className={lp.ctaH2}>Pick up where you left off</h2>
+          <h2 className={lp.ctaH2}>Keep the tool list nearby</h2>
           <p className={lp.ctaLead}>
-            {lp.c
-              ? "The hub lists every utility in one grid — easy on phones, spacious on desktop."
-              : "The hub keeps every utility in one loud-clear grid — thumb reach on phones, wide layout on desktop."}
+            Bookmark the hub for small jobs that are too annoying to do by hand and too simple
+            to justify a full app.
           </p>
           <Link href="/sif/utils" className={lp.ctaBtn}>
-            Enter the hub
+            Open the hub
             <ArrowRight className="h-5 w-5" aria-hidden />
           </Link>
         </div>
@@ -419,7 +436,7 @@ export default function LandingPage() {
 
       <footer className={lp.footer}>
         <div className="mx-auto flex max-w-[1600px] flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
-          <p className={lp.footerMeta}>{"Sif's Utilities"} · Next.js</p>
+          <p className={lp.footerMeta}>{"Sif's Utilities"} · local-first file tools</p>
           <div className={lp.footerLinks}>
             <Link href="/pixsqueeze" className={lp.footerLink}>
               PixSqueeze

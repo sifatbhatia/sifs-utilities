@@ -19,10 +19,9 @@ export interface BatchFile {
 interface BatchQueueProps {
     files: BatchFile[];
     onRemove: (id: string) => void;
-    isProcessing: boolean;
 }
 
-export default function BatchQueue({ files, onRemove, isProcessing }: BatchQueueProps) {
+export default function BatchQueue({ files, onRemove }: BatchQueueProps) {
     return (
         <div className="space-y-3">
             <AnimatePresence initial={false} mode="popLayout">

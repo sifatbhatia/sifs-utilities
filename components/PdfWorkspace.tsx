@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, FileText, X, Settings2, Loader2, FileType, List, ChevronDown } from 'lucide-react';
 import DropZone from './DropZone';
@@ -11,6 +11,21 @@ import { formatBytes } from '@/lib/compression';
 import PremiumSlider from './PremiumSlider';
 import { useTheme } from '@/components/theme/ThemeProvider';
 import { workspaceChrome } from '@/lib/marketingChrome';
+
+function useObjectUrl(blob: Blob | null) {
+    const objectUrl = useMemo(() => {
+        if (!blob) return null;
+        return URL.createObjectURL(blob);
+    }, [blob]);
+
+    useEffect(() => {
+        return () => {
+            if (objectUrl) URL.revokeObjectURL(objectUrl);
+        };
+    }, [objectUrl]);
+
+    return objectUrl;
+}
 
 export default function PdfWorkspace() {
     const { theme } = useTheme();
@@ -29,51 +44,29 @@ export default function PdfWorkspace() {
         extractPage
     } = usePdf();
 
-    const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
-    const [compressedPdfUrl, setCompressedPdfUrl] = React.useState<string | null>(null);
     const [showSidebar, setShowSidebar] = useState(false);
     const [showPageExtractor, setShowPageExtractor] = useState(false);
     const [lastPreviewQuality, setLastPreviewQuality] = useState<number | null>(null);
-    const handleCompressRef = React.useRef(handleCompress);
+    const pdfUrl = useObjectUrl(file);
+    const compressedPdfUrl = useObjectUrl(compressedBlob);
 
-    // Create object URL for PDF preview
-    React.useEffect(() => {
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setPdfUrl(url);
-            return () => URL.revokeObjectURL(url);
-        } else {
-            setPdfUrl(null);
-        }
-    }, [file]);
+    const handleCompressWithPreview = useCallback(async () => {
+        setLastPreviewQuality(quality);
+        await handleCompress();
+    }, [handleCompress, quality]);
 
-    React.useEffect(() => {
-        if (compressedBlob) {
-            const url = URL.createObjectURL(compressedBlob);
-            setCompressedPdfUrl(url);
-            setLastPreviewQuality(quality);
-            return () => URL.revokeObjectURL(url);
-        } else {
-            setCompressedPdfUrl(null);
-        }
-    }, [compressedBlob, quality]);
-
-    React.useEffect(() => {
-        handleCompressRef.current = handleCompress;
-    }, [handleCompress]);
-
-    React.useEffect(() => {
+    useEffect(() => {
         if (!file || isProcessing) return;
         // Avoid auto-running on initial load; only refresh an existing preview.
         if (lastPreviewQuality === null) return;
         if (lastPreviewQuality === quality) return;
 
         const timer = window.setTimeout(() => {
-            void handleCompressRef.current();
+            void handleCompressWithPreview();
         }, 320);
 
         return () => window.clearTimeout(timer);
-    }, [file, isProcessing, lastPreviewQuality, quality]);
+    }, [file, handleCompressWithPreview, isProcessing, lastPreviewQuality, quality]);
 
     const activePreviewUrl = compressedPdfUrl || pdfUrl;
     const downloadUrl = compressedPdfUrl;
@@ -103,7 +96,7 @@ export default function PdfWorkspace() {
                         key="workspace"
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="flex-1 flex flex-col lg:grid lg:grid-cols-[1fr_360px] gap-4 p-2 sm:p-4 md:p-6 min-h-0 h-full overflow-hidden max-w-[1500px] mx-auto w-full relative"
+                        className="flex-1 flex flex-col lg:grid lg:grid-cols-[1fr_360px] gap-4 p-2 sm:p-4 md:p-6 min-h-0 md:h-full md:overflow-hidden max-w-[1500px] mx-auto w-full relative"
                     >
                         {/* LEFT COLUMN: Full PDF Preview */}
                         <div className="flex flex-col gap-4 min-h-0 flex-1 relative">
@@ -195,7 +188,7 @@ export default function PdfWorkspace() {
                                                 <motion.button
                                                     whileHover={{ scale: 1.02 }}
                                                     whileTap={{ scale: 0.98 }}
-                                                    onClick={handleCompress}
+                                                    onClick={handleCompressWithPreview}
                                                     disabled={isProcessing}
                                                     className="w-full bg-zinc-700 text-white px-6 py-2.5 rounded-[16px] font-bold text-[10px] uppercase tracking-tight flex items-center justify-center gap-2 hover:bg-zinc-800 transition-all shadow-[0px_16px_34px_0px_rgba(0,0,0,0.25),0px_2px_8px_0px_rgba(0,0,0,0.14),inset_0px_1px_0px_0px_rgba(255,255,255,0.22)] hover:shadow-[0px_20px_40px_0px_rgba(0,0,0,0.3),0px_2px_10px_0px_rgba(0,0,0,0.16),inset_0px_1px_0px_0px_rgba(255,255,255,0.28)] border border-white/10 disabled:opacity-30"
                                                 >
@@ -367,7 +360,7 @@ export default function PdfWorkspace() {
                                     <motion.button
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
-                                        onClick={handleCompress}
+                                        onClick={handleCompressWithPreview}
                                         disabled={isProcessing}
                                         className="w-full bg-zinc-700 text-white px-8 py-4 rounded-[20px] font-bold text-[11px] uppercase tracking-tight flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all shadow-[0px_16px_34px_0px_rgba(0,0,0,0.25),0px_2px_8px_0px_rgba(0,0,0,0.14),inset_0px_1px_0px_0px_rgba(255,255,255,0.22)] hover:shadow-[0px_20px_40px_0px_rgba(0,0,0,0.3),0px_2px_10px_0px_rgba(0,0,0,0.16),inset_0px_1px_0px_0px_rgba(255,255,255,0.28)] border border-white/10 disabled:opacity-30"
                                     >

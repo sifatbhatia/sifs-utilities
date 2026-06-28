@@ -7,6 +7,8 @@ import {
   CircleDashed,
   LayoutGrid,
   Fingerprint,
+  Braces,
+  FileCode2,
 } from "lucide-react";
 
 export type SiteTool = {
@@ -82,5 +84,21 @@ export const SITE_TOOLS: SiteTool[] = [
     Icon: LayoutGrid,
     iconClass: "text-emerald-600",
     iconBg: "bg-emerald-100",
+  },
+  {
+    name: "JSON Formatter",
+    description: "Format, compact, validate, copy, and download JSON locally in your browser.",
+    href: "/json-formatter",
+    Icon: Braces,
+    iconClass: "text-sky-700",
+    iconBg: "bg-sky-100",
+  },
+  {
+    name: "YAML Formatter",
+    description: "Format, compact, validate, copy, and download YAML locally in your browser.",
+    href: "/yaml-formatter",
+    Icon: FileCode2,
+    iconClass: "text-teal-700",
+    iconBg: "bg-teal-100",
   },
 ];

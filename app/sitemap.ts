@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sifsutilities.com";
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sifs-utils.vercel.app";
 
 const routes = [
   "",
@@ -13,6 +14,8 @@ const routes = [
   "/synth-strip",
   "/grain-pix",
   "/icon-set",
+  "/json-formatter",
+  "/yaml-formatter",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

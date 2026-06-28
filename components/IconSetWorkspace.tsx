@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, LayoutGrid, X, Layers, Image as ImageIcon, Loader2, Palette, Settings2, Maximize, Smartphone, Info, List } from 'lucide-react';
+import { X, Layers, Loader2, Palette, Maximize, Smartphone, Info, List } from 'lucide-react';
 import DropZone from './DropZone';
 import PremiumBackground from '@/components/PremiumBackground';
 import JSZip from 'jszip';
@@ -10,6 +10,7 @@ import PremiumSlider from './PremiumSlider';
 import clsx from 'clsx';
 import { useTheme } from '@/components/theme/ThemeProvider';
 import { workspaceChrome } from '@/lib/marketingChrome';
+import { downloadBlob } from '@/lib/download';
 
 export default function IconSetWorkspace() {
     const { theme } = useTheme();
@@ -20,6 +21,7 @@ export default function IconSetWorkspace() {
     const [bgColor, setBgColor] = useState('#ffffff');
     const [shape, setShape] = useState<'squircle' | 'circle' | 'square'>('squircle');
     const [showSidebar, setShowSidebar] = useState(false);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
     // Icon sizes config
     const sizes = [
@@ -33,69 +35,95 @@ export default function IconSetWorkspace() {
         { width: 32, height: 32, name: 'Favicon', sub: '32x32', category: 'web', displayScale: 0.4 },
     ];
 
+    useEffect(() => {
+        if (!file) {
+            setPreviewUrl(null);
+            return;
+        }
+
+        const objectUrl = URL.createObjectURL(file);
+        setPreviewUrl(objectUrl);
+
+        return () => URL.revokeObjectURL(objectUrl);
+    }, [file]);
+
+    const canvasToPngBlob = (canvas: HTMLCanvasElement) =>
+        new Promise<Blob>((resolve, reject) => {
+            canvas.toBlob((blob) => {
+                if (blob) {
+                    resolve(blob);
+                } else {
+                    reject(new Error('Icon rendering failed'));
+                }
+            }, 'image/png');
+        });
+
     const generateIcons = async () => {
         if (!file) return;
         setIsProcessing(true);
+        const sourceUrl = URL.createObjectURL(file);
 
         try {
             const zip = new JSZip();
             const img = new Image();
-            img.src = URL.createObjectURL(file);
+            img.src = sourceUrl;
 
-            await new Promise((resolve) => { img.onload = resolve; });
+            await new Promise<void>((resolve, reject) => {
+                img.onload = () => resolve();
+                img.onerror = () => reject(new Error('Logo image failed to load'));
+            });
 
-            for (const size of sizes) {
+            const iconBlobs = await Promise.all(sizes.map(async (size) => {
                 const canvas = document.createElement('canvas');
                 canvas.width = size.width;
                 canvas.height = size.height;
                 const ctx = canvas.getContext('2d');
-                if (ctx) {
-                    ctx.imageSmoothingEnabled = true;
-                    ctx.imageSmoothingQuality = 'high';
+                if (!ctx) throw new Error('Canvas rendering is not available');
 
-                    // Draw Background
-                    ctx.fillStyle = bgColor;
-                    ctx.fillRect(0, 0, size.width, size.height);
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
 
-                    // Calculate Dimensions with Scale
-                    const drawWidth = size.width * scale;
-                    const drawHeight = size.height * scale;
+                // Draw Background
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, size.width, size.height);
 
-                    // Support non-square logos? Maintain ratio
-                    const imgRatio = img.width / img.height;
-                    let finalWidth = drawWidth;
-                    let finalHeight = drawHeight;
+                // Calculate Dimensions with Scale
+                const drawWidth = size.width * scale;
+                const drawHeight = size.height * scale;
 
-                    if (imgRatio > 1) {
-                        finalHeight = drawWidth / imgRatio;
-                    } else {
-                        finalWidth = drawHeight * imgRatio;
-                    }
+                // Support non-square logos? Maintain ratio
+                const imgRatio = img.width / img.height;
+                let finalWidth = drawWidth;
+                let finalHeight = drawHeight;
 
-                    const x = (size.width - finalWidth) / 2;
-                    const y = (size.height - finalHeight) / 2;
-
-                    ctx.drawImage(img, x, y, finalWidth, finalHeight);
-
-                    const blob = await new Promise<Blob | null>(resolve =>
-                        canvas.toBlob(resolve, 'image/png')
-                    );
-
-                    if (blob) {
-                        zip.file(`icon-${size.width}x${size.height}.png`, blob);
-                    }
+                if (imgRatio > 1) {
+                    finalHeight = drawWidth / imgRatio;
+                } else {
+                    finalWidth = drawHeight * imgRatio;
                 }
-            }
+
+                const x = (size.width - finalWidth) / 2;
+                const y = (size.height - finalHeight) / 2;
+
+                ctx.drawImage(img, x, y, finalWidth, finalHeight);
+
+                return {
+                    fileName: `icon-${size.width}x${size.height}.png`,
+                    blob: await canvasToPngBlob(canvas),
+                };
+            }));
+
+            iconBlobs.forEach(({ fileName, blob }) => {
+                zip.file(fileName, blob);
+            });
 
             const content = await zip.generateAsync({ type: "blob" });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(content);
-            link.download = `IconSet_${file.name.split('.')[0]}.zip`;
-            link.click();
+            downloadBlob(content, `IconSet_${file.name.split('.')[0]}.zip`);
 
         } catch (error) {
             console.error(error);
         } finally {
+            URL.revokeObjectURL(sourceUrl);
             setIsProcessing(false);
         }
     };
@@ -126,7 +154,7 @@ export default function IconSetWorkspace() {
                         key="workspace"
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="flex-1 flex flex-col lg:grid lg:grid-cols-[1fr_360px] gap-4 p-2 sm:p-4 md:p-6 min-h-0 h-full overflow-hidden max-w-[1500px] mx-auto w-full relative"
+                        className="flex-1 flex flex-col lg:grid lg:grid-cols-[1fr_360px] gap-4 p-2 sm:p-4 md:p-6 min-h-0 md:h-full md:overflow-hidden max-w-[1500px] mx-auto w-full relative"
                     >
                         {/* LEFT: Preview Grid */}
                         <div className="flex flex-col gap-4 min-h-0 flex-1 relative h-full">
@@ -151,11 +179,14 @@ export default function IconSetWorkspace() {
                                                         className="w-full h-full flex items-center justify-center transition-all duration-300 pointer-events-none"
                                                         style={{ transform: `scale(${scale})` }}
                                                     >
-                                                        <img
-                                                            src={URL.createObjectURL(file)}
-                                                            alt={size.name}
-                                                            className="w-full h-full object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
-                                                        />
+                                                        {previewUrl && (
+                                                            /* eslint-disable-next-line @next/next/no-img-element -- Blob object URLs cannot be optimized by next/image. */
+                                                            <img
+                                                                src={previewUrl}
+                                                                alt={size.name}
+                                                                className="w-full h-full object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
+                                                            />
+                                                        )}
                                                     </div>
 
                                                     {/* Size Badge */}

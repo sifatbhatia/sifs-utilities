@@ -51,7 +51,7 @@ export default function DropZone({
     >
       <input {...getInputProps()} />
 
-      <div className="z-10 flex flex-col items-center gap-4 px-4 py-6 text-center sm:gap-6">
+      <div className="z-10 flex flex-col items-center gap-3 px-4 py-6 text-center sm:gap-6">
         <div
           className={clsx(dz.plusBtn, isDragActive ? "scale-110" : "group-hover:scale-105")}
         >

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { compressImage } from '@/lib/compression';
 import { BatchFile } from '@/components/BatchQueue';
 import JSZip from 'jszip';
+import { downloadBlob } from '@/lib/download';
 
 interface PixContextType {
     files: BatchFile[];
@@ -118,20 +119,14 @@ export function PixProvider({ children }: { children: React.ReactNode }) {
 
         if (completed.length === 1) {
             const f = completed[0];
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(f.compressedBlob!);
-            link.download = `compressed_${f.file.name.split('.')[0]}.${format}`;
-            link.click();
+            downloadBlob(f.compressedBlob!, `compressed_${f.file.name.split('.')[0]}.${format}`);
         } else {
             const zip = new JSZip();
             completed.forEach(f => {
                 zip.file(`compressed_${f.file.name.split('.')[0]}.${format}`, f.compressedBlob!);
             });
             const content = await zip.generateAsync({ type: "blob" });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(content);
-            link.download = "images.zip";
-            link.click();
+            downloadBlob(content, "images.zip");
         }
     };
 

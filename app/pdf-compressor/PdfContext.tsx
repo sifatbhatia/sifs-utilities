@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { PDFDocument } from 'pdf-lib';
 
 // --- PDF.js Dynamic Import ---

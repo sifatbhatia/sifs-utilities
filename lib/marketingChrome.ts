@@ -62,7 +62,7 @@ export function landingChrome(theme: ThemeId) {
     ),
 
     h1: p(
-      "text-[2.75rem] font-bold leading-[0.92] tracking-[-0.04em] text-[#575757] sm:text-6xl md:text-7xl lg:text-[min(6.5rem,9.2vw)]",
+      "text-[2.75rem] font-bold leading-[0.92] tracking-normal text-[#575757] sm:text-6xl md:text-7xl lg:text-[6.25rem]",
       "text-[2.75rem] font-bold leading-[0.9] tracking-[-0.04em] text-neutral-950 sm:text-6xl md:text-7xl lg:text-[min(6.5rem,9.2vw)]",
       "text-[2.75rem] font-black leading-[0.88] tracking-[-0.06em] text-neo-ink sm:text-6xl md:text-7xl lg:text-[min(6.5rem,9.2vw)]",
     ),
@@ -134,7 +134,7 @@ export function landingChrome(theme: ThemeId) {
     ),
 
     suiteH2: p(
-      "lp-reveal mt-3 text-3xl font-bold leading-[0.95] tracking-[-0.03em] text-[#575757] sm:text-4xl md:text-5xl lg:text-6xl",
+      "lp-reveal mt-3 text-3xl font-bold leading-[0.95] tracking-normal text-[#575757] sm:text-4xl md:text-5xl lg:text-6xl",
       "lp-reveal mt-3 text-3xl font-bold leading-[0.95] tracking-[-0.03em] text-neutral-950 sm:text-4xl md:text-5xl lg:text-6xl",
       "lp-reveal mt-3 text-3xl font-black leading-[0.92] tracking-[-0.05em] text-neo-ink sm:text-4xl md:text-5xl lg:text-6xl",
     ),
@@ -164,7 +164,7 @@ export function landingChrome(theme: ThemeId) {
     ),
 
     pillarCard: p(
-      "lp-pillar rounded-2xl border border-neutral-400/25 bg-white p-6 shadow-md sm:p-8",
+      "lp-pillar rounded-2xl border border-white/50 bg-white/70 p-6 shadow-lg shadow-neutral-700/10 backdrop-blur-xl sm:p-8",
       "lp-pillar rounded-3xl border border-white/50 bg-white/50 p-6 shadow-xl backdrop-blur-xl sm:p-8",
       "lp-pillar rounded-xl border-[3px] border-neo-ink bg-white p-6 shadow-[6px_6px_0_0_var(--neo-ink)] sm:p-8",
     ),
@@ -183,7 +183,7 @@ export function landingChrome(theme: ThemeId) {
     ),
 
     ctaBox: p(
-      "lp-cta-inner relative mx-auto max-w-[1600px] overflow-hidden rounded-2xl border border-neutral-400/30 bg-[rgba(87,87,87,1)] px-6 py-12 text-center shadow-xl sm:px-10 sm:py-16 md:py-20",
+      "lp-cta-inner relative mx-auto max-w-[1600px] overflow-hidden rounded-2xl border border-white/20 bg-[rgba(87,87,87,0.94)] px-6 py-12 text-center shadow-2xl shadow-neutral-700/20 backdrop-blur-xl sm:px-10 sm:py-16 md:py-20",
       "lp-cta-inner relative mx-auto max-w-[1600px] overflow-hidden rounded-3xl border border-white/20 bg-neutral-900/88 px-6 py-12 text-center shadow-2xl shadow-black/20 backdrop-blur-2xl sm:px-10 sm:py-16 md:py-20",
       "lp-cta-inner relative mx-auto max-w-[1600px] overflow-hidden rounded-xl border-[3px] border-neo-ink bg-neo-ink px-6 py-12 text-center shadow-[8px_8px_0_0_#ff2d7a] sm:px-10 sm:py-16 md:py-20",
     ),
@@ -314,7 +314,7 @@ export function hubChrome(theme: ThemeId) {
     ),
 
     h1: p(
-      "text-[2.25rem] font-bold leading-[0.95] tracking-[-0.04em] text-[#575757] sm:text-6xl md:text-7xl lg:text-[100px]",
+      "text-[2.25rem] font-bold leading-[0.95] tracking-normal text-[#575757] sm:text-6xl md:text-7xl lg:text-[96px]",
       "text-[2.25rem] font-bold leading-[0.95] tracking-[-0.04em] text-neutral-950 sm:text-6xl md:text-7xl lg:text-[100px]",
       "text-[2.25rem] font-black leading-[0.92] tracking-[-0.06em] text-neo-ink sm:text-6xl md:text-7xl lg:text-[100px]",
     ),
@@ -326,7 +326,7 @@ export function hubChrome(theme: ThemeId) {
     ),
 
     card: p(
-      "relative flex min-h-[240px] flex-col justify-between overflow-hidden rounded-2xl border border-neutral-400/25 bg-[#e8e8e8] p-6 shadow-md transition-all duration-200 sm:min-h-[280px] md:h-[320px] sm:p-8 hover:-translate-y-1 hover:shadow-xl sm:group-hover:scale-[1.01]",
+      "relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-2xl border border-white/55 bg-white/65 p-5 shadow-lg shadow-neutral-700/10 backdrop-blur-xl transition-all duration-200 sm:min-h-[280px] sm:p-8 md:h-[320px] hover:-translate-y-1 hover:shadow-xl sm:group-hover:scale-[1.01]",
       "relative flex min-h-[240px] flex-col justify-between overflow-hidden rounded-3xl border border-white/50 bg-white/50 p-6 shadow-xl backdrop-blur-xl transition-all duration-200 sm:min-h-[280px] md:h-[320px] sm:p-8 hover:-translate-y-1 hover:shadow-2xl sm:group-hover:scale-[1.01]",
       "relative flex min-h-[240px] flex-col justify-between overflow-hidden rounded-xl border-[3px] border-neo-ink bg-white p-6 shadow-[6px_6px_0_0_var(--neo-ink)] transition-transform duration-150 sm:min-h-[280px] md:h-[320px] sm:p-8 hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--neo-ink)] active:translate-x-1 active:translate-y-1 active:shadow-[2px_2px_0_0_var(--neo-ink)] sm:group-hover:scale-[1.01]",
     ),
@@ -380,7 +380,7 @@ export function workspaceChrome(theme: ThemeId) {
     ),
 
     mainPanel: p(
-      "relative z-10 space-y-5 rounded-2xl border border-neutral-400/25 bg-white p-4 shadow-md sm:p-6",
+      "relative z-10 space-y-5 rounded-2xl border border-white/55 bg-white/72 p-4 shadow-lg shadow-neutral-700/10 backdrop-blur-xl sm:p-6",
       "relative z-10 space-y-5 rounded-2xl border border-white/50 bg-white/55 p-4 shadow-xl backdrop-blur-xl sm:p-6",
       "relative z-10 space-y-5 rounded-xl border-[3px] border-neo-ink bg-white p-4 shadow-[6px_6px_0_0_var(--neo-ink)] sm:p-6",
     ),
@@ -428,7 +428,7 @@ export function workspaceChrome(theme: ThemeId) {
     ),
 
     previewCard: p(
-      "flex min-h-[180px] flex-col overflow-hidden rounded-2xl border border-neutral-400/25 bg-white p-3 shadow-md sm:p-4",
+      "flex min-h-[180px] flex-col overflow-hidden rounded-2xl border border-white/55 bg-white/72 p-3 shadow-lg shadow-neutral-700/10 backdrop-blur-xl sm:p-4",
       "flex min-h-[180px] flex-col overflow-hidden rounded-2xl border border-white/50 bg-white/50 p-3 shadow-xl backdrop-blur-xl sm:p-4",
       "flex min-h-[180px] flex-col overflow-hidden rounded-xl border-[3px] border-neo-ink bg-white p-3 shadow-[5px_5px_0_0_var(--neo-ink)] sm:p-4",
     ),
@@ -463,7 +463,7 @@ export function dropZoneChrome(theme: ThemeId) {
   const p = (cl: string, gl: string, neo: string) => pick3(theme, cl, gl, neo);
   return {
     root: p(
-      "relative group cursor-pointer touch-manipulation w-full min-h-[200px] h-full max-w-[1610px] flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#8E8E8E] bg-[#D9D9D9] shadow-md transition-[box-shadow,transform] duration-200 ease-out hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.99]",
+      "relative group cursor-pointer touch-manipulation w-full min-h-[220px] h-full max-w-[1610px] flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-500/45 bg-white/55 shadow-lg shadow-neutral-700/10 backdrop-blur-xl transition-[box-shadow,transform] duration-200 ease-out hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.99]",
       "relative group cursor-pointer touch-manipulation w-full min-h-[200px] h-full max-w-[1610px] flex flex-col items-center justify-center rounded-3xl border border-dashed border-white/55 bg-white/45 shadow-xl backdrop-blur-2xl transition-[box-shadow,transform] duration-200 ease-out hover:border-sky-300/50 hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.99]",
       "relative group cursor-pointer touch-manipulation w-full min-h-[200px] h-full max-w-[1610px] flex flex-col items-center justify-center rounded-xl border-[3px] border-neo-ink bg-white shadow-[6px_6px_0_0_var(--neo-ink)] transition-[transform,box-shadow] duration-150 ease-out hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--neo-ink)] active:translate-x-1 active:translate-y-1 active:shadow-[2px_2px_0_0_var(--neo-ink)]",
     ),
